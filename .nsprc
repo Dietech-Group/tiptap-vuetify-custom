@@ -1,0 +1,4 @@
+{
+    "https://github.com/advisories/GHSA-5j4c-8p2g-v4jx": "Since we use Vue 2 there is no fix avaiable",
+    "https://github.com/advisories/GHSA-g3ch-rx76-35fx": "Since we use Vue 2 there is no fix avaiable"
+}

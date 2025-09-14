@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    //where our generate types will be placed 
+    "outDir": "./dist",
+    //the JS is generated with Vite, but
+    //our type definitions are generated with TS.
+    //these two options make sure only the type definitions
+    //are generated
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    //Recommended, because it enables a wide range of type checking
+    "strict": true,
+    //Forces consistency in casing of file names to not create 
+    //inconsistencies on filenames between platforms
+    "forceConsistentCasingInFileNames": true,
+    //We still have to put this here to be able to build
+    //the types using modern Vite features like
+    //dynamic `import()`s and `import.meta`
+    "target": "ESNext",
+    "module": "ESNext",
+    //Makes typescript understand the imports on non .TS
+    "moduleResolution": "Node",
+    //let us import CommonJS libs more easily:
+    // import moment from "moment";
+    //instead of:
+    // import * as moment from "moment";
+    "esModuleInterop": true,
+    //Avoids TS to stop compiling because of external 
+    //dependencies typings errors
+    "skipLibCheck": true,
+    "types": ["vue"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  //includes on our generated types build:
+  //the src/index.ts files and every .vue file inside /src 
+  "include": [
+    "env.d.ts",
+    "types/**/*",
+    "src/**/*.ts",
+    "src/**/*.vue"
+  ],
+}

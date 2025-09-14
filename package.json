@@ -1,0 +1,43 @@
+{
+  "name": "component-lib",
+  "version": "0.0.0",
+  "main": "./dist/component-lib.umd.cjs",
+  "module": "./dist/component-lib.js",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check build-only",
+    "preview": "vite preview --port 4173",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --composite false",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "audit": "better-npm-audit audit"
+  },
+  "dependencies": {
+    "vue": "^2.7.7"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.19.14",
+    "@vitejs/plugin-legacy": "^6.1.1",
+    "@vitejs/plugin-vue2": "^2.3.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "better-npm-audit": "^3.11.0",
+    "eslint": "^8.5.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1",
+    "terser": "^5.14.2",
+    "typescript": "^5.9.2",
+    "vite": "^6.3.6",
+    "vite-plugin-css-injected-by-js": "^3.3.1",
+    "vite-plugin-dts": "^3.7.1",
+    "vue-template-compiler": "^2.7.7",
+    "vue-tsc": "^0.38.8",
+    "vuetify": "^2.7.2"
+  }
+}
