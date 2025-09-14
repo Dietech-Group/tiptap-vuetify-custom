@@ -34,7 +34,7 @@
     "typescript": "^5.9.2",
     "vite": "^6.3.6",
     "vite-plugin-css-injected-by-js": "^3.3.1",
-    "vite-plugin-dts": "^3.7.1",
+    "vite-plugin-dts": "^4.5.4",
     "vue-template-compiler": "^2.7.7",
     "vue-tsc": "^0.38.8",
     "vuetify": "^2.7.2"
