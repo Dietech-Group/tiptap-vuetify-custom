@@ -19,7 +19,9 @@
     "target": "ESNext",
     "module": "ESNext",
     //Makes typescript understand the imports on non .TS
-    "moduleResolution": "Node",
+    // change from node to bunlder because of: https://www.npmjs.com/package/@vue/tsconfig/v/0.5.1
+    "moduleResolution": "bundler",
+    "resolvePackageJsonExports": false,
     //let us import CommonJS libs more easily:
     // import moment from "moment";
     //instead of:
