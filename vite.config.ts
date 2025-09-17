@@ -91,6 +91,10 @@ export default defineConfig(({ mode }) => {
           "@floating-ui/core",
           "@floating-ui/dom",
           "@floating-ui/utils",
+
+          'prosemirror-model',
+          'prosemirror-state',
+          'prosemirror-transform',
         ],
         //Add this so the UMD build will recognize the global variables
         //of externalized dependencies
@@ -135,6 +139,10 @@ export default defineConfig(({ mode }) => {
             "@floating-ui/core": "floatingUICore",
             "@floating-ui/dom": "floatingUIDom",
             "@floating-ui/utils": "floatingUIUtils",
+
+            'prosemirror-model': 'ProseMirrorModel',
+            'prosemirror-state': 'ProseMirrorState',
+            'prosemirror-transform': 'ProseMirrorTransform',
           },
           exports: "named",
           plugins: [
