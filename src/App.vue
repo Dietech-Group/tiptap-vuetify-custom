@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { VueTest1 } from "../lib";
 </script>
 
 <template>
   <div id="app">
-    <HelloWorld msg="You did it!" />
+    <VueTest1 message="Yesssss" />
   </div>
 </template>

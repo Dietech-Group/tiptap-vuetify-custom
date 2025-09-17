@@ -1,4 +1,5 @@
 import HelloWorld from "./components/HelloWorld.vue";
+import VueTest1 from "./components/VueTest1.vue";
 
 // This is needed if the user want to install the library globally.
 export default {
@@ -8,4 +9,4 @@ export default {
 };
 
 // This is needed if the user want to import the components every time they want to use them.
-export { HelloWorld };
+export { HelloWorld, VueTest1 };
