@@ -1,9 +1,6 @@
-// !!! В этом файле не использовать алиасы в путях (e.g. "~")
 import Vue, { PluginObject } from "vue";
 import Vuetify from "vuetify";
-import { VuetifyIconsGroups } from "../src/configs/theme";
-
-// тут нужно все экспортировать (export), а не использовтаь namepsace
+import { VuetifyIconsGroups } from "../lib/configs/theme";
 
 export interface PluginInterface<T> extends PluginObject<T> {
   vuetify: Vuetify;

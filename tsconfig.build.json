@@ -1,9 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "env.d.ts",
-    "types/**/*",
-    "lib/**/*.ts",
-    "lib/**/*.vue",
-  ],
+  "include": ["env.d.ts", "types/**/*", "lib/**/*.ts", "lib/**/*.vue"]
 }

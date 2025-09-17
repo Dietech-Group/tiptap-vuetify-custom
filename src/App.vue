@@ -1,9 +1,30 @@
-<script setup lang="ts">
-import { VueTest1 } from "../lib";
-</script>
-
 <template>
-  <div id="app">
-    <VueTest1 message="Yesssss" />
+  <div>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons"
+      rel="stylesheet"
+    />
+
+    <v-app>
+      <v-main>
+        <v-container>
+          <h1>The Tiptap Editor Package</h1>
+
+          <div class="element-with-relative-position-to-test-bugs">
+            <router-view />
+          </div>
+        </v-container>
+      </v-main>
+    </v-app>
   </div>
 </template>
+
+<script>
+export default {};
+</script>
+
+<style lang="scss">
+.element-with-relative-position-to-test-bugs {
+  position: relative;
+}
+</style>

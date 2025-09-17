@@ -2,7 +2,7 @@
   "compilerOptions": {
     // Do not emit compiler output files like JavaScript source code, source-maps or declarations.
     "noEmit": true,
-    //where our generate types will be placed 
+    //where our generate types will be placed
     "outDir": "./dist/types",
     //the JS is generated with Vite, but
     //our type definitions are generated with TS.
@@ -12,7 +12,7 @@
     "emitDeclarationOnly": true,
     //Recommended, because it enables a wide range of type checking
     "strict": true,
-    //Forces consistency in casing of file names to not create 
+    //Forces consistency in casing of file names to not create
     //inconsistencies on filenames between platforms
     "forceConsistentCasingInFileNames": true,
     //We still have to put this here to be able to build
@@ -22,30 +22,33 @@
     "module": "ESNext",
     //Makes typescript understand the imports on non .TS
     // change from node to bunlder because of: https://www.npmjs.com/package/@vue/tsconfig/v/0.5.1
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "resolvePackageJsonExports": false,
     //let us import CommonJS libs more easily:
     // import moment from "moment";
     //instead of:
     // import * as moment from "moment";
     "esModuleInterop": true,
-    //Avoids TS to stop compiling because of external 
+    //Avoids TS to stop compiling because of external
     //dependencies typings errors
     "skipLibCheck": true,
-    "types": ["vue"],
+    "types": ["vue", "node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
+      "@/*": ["./lib/*"],
+      "src/*": ["./src/*"],
+      "dist/*": ["./dist/*"],
+    }
   },
   //includes on our generated types build:
-  //the src/index.ts files and every .vue file inside /src 
+  //the src/index.ts files and every .vue file inside /src
   "include": [
     "env.d.ts",
     "types/**/*",
     "src/**/*.ts",
     "src/**/*.vue",
     "lib/**/*.ts",
-    "lib/**/*.vue",
+    "lib/**/*.vue"
   ],
+  "exclude": ["node_modules"]
 }
