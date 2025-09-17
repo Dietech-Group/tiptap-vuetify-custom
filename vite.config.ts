@@ -38,7 +38,8 @@ export default defineConfig(({ mode }) => {
         //Here, we set the entry file
         entry: resolve(__dirname, "lib/index.ts"),
         //And the name of the library
-        name: "component-lib",
+        name: "tiptapVuetifyCustom",
+        fileName: "bundle",
       },
       rollupOptions: {
         //Here, we are externalizing Vue to prevent it to be bundled
@@ -48,7 +49,7 @@ export default defineConfig(({ mode }) => {
         //of externalized dependencies
         output: formats.map((format) => ({
           format,
-          name: "component-lib",
+          name: "tiptapVuetifyCustom",
           globals: {
             vue: "Vue",
           },

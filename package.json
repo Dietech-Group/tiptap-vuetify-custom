@@ -1,9 +1,9 @@
 {
-  "name": "component-lib",
+  "name": "tiptap-vuetify-custom",
   "version": "0.0.0",
   "type": "module",
-  "main": "./dist/component-lib.umd.cjs",
-  "module": "./dist/component-lib.js",
+  "main": "./dist/bundle.umd.cjs",
+  "module": "./dist/bundle.js",
   "typings": "./dist/types/index.d.ts",
   "files": [
     "dist",
