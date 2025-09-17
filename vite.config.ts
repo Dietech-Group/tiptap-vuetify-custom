@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 import { resolve } from "path";
-import { defineConfig, type UserConfig } from "vite";
+import { defineConfig, LibraryFormats, type UserConfig } from "vite";
 // Remove the legacy plugin, as we don't need suport for IE
 // and it is does not support Vite Library Mode.
 // import legacy from "@vitejs/plugin-legacy";
@@ -11,6 +11,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  const formats: LibraryFormats[] = ["es", "umd"];
+
   const config: UserConfig = {
     plugins: [
       vue2(),
@@ -33,6 +35,7 @@ export default defineConfig(({ mode }) => {
         entry: resolve(__dirname, "lib/index.ts"),
         //And the name of the library
         name: "component-lib",
+        formats,
       },
       rollupOptions: {
         //Here, we are externalizing Vue to prevent it to be bundled
@@ -40,24 +43,26 @@ export default defineConfig(({ mode }) => {
         external: ["vue"],
         //Add this so the UMD build will recognize the global variables
         //of externalized dependencies
-        output: {
+        output: formats.map((format) => ({
+          format,
+          name: "component-lib",
           globals: {
-            vue: "Vue"
+            vue: "Vue",
           },
           exports: "named",
           plugins: [
-            mode === "analyze"
+            mode === "analyze" && format === "es"
               ? // rollup-plugin-visualizer
                 // https://github.com/btd/rollup-plugin-visualizer
                 visualizer({
                   open: true,
-                  filename: "dist/stats.html",
+                  filename: `dist/stats-${format}.html`,
                   // gzipSize: true,
                   // brotliSize: true,
                 })
               : undefined,
           ],
-        },
+        })),
       },
     },
   };
