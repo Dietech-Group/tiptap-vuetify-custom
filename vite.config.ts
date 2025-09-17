@@ -16,7 +16,11 @@ export default defineConfig(({ mode }) => {
   const config: UserConfig = {
     plugins: [
       vue2(),
-      // dts(),
+      dts({
+        outDir: "./dist/types",
+        insertTypesEntry: true,
+        tsconfigPath: "./tsconfig.build.json",
+      }),
       cssInjectedByJsPlugin(),
       //     legacy({
       //       targets: ["ie >= 11"],
@@ -35,7 +39,6 @@ export default defineConfig(({ mode }) => {
         entry: resolve(__dirname, "lib/index.ts"),
         //And the name of the library
         name: "component-lib",
-        formats,
       },
       rollupOptions: {
         //Here, we are externalizing Vue to prevent it to be bundled

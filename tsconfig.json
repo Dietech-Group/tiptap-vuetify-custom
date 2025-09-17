@@ -3,13 +3,13 @@
     // Do not emit compiler output files like JavaScript source code, source-maps or declarations.
     "noEmit": true,
     //where our generate types will be placed 
-    // "outDir": "./dist",
+    "outDir": "./dist/types",
     //the JS is generated with Vite, but
     //our type definitions are generated with TS.
     //these two options make sure only the type definitions
     //are generated
-    // "declaration": true,
-    // "emitDeclarationOnly": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     //Recommended, because it enables a wide range of type checking
     "strict": true,
     //Forces consistency in casing of file names to not create 

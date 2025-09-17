@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./dist/component-lib.umd.cjs",
   "module": "./dist/component-lib.js",
-  "typings": "./dist/index.d.ts",
+  "typings": "./dist/types/index.d.ts",
   "files": [
     "dist",
     "lib"
