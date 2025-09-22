@@ -55,7 +55,7 @@ import { Document } from "@tiptap/extension-document";
 import { Paragraph } from "@tiptap/extension-paragraph";
 import { Text } from "@tiptap/extension-text";
 import { Placeholder } from "@tiptap/extensions";
-import { type Editor as EditorType, Editor, EditorContent, type Content } from "@tiptap/vue-2";
+import { Editor, EditorContent, type Content } from "@tiptap/vue-2";
 
 import { VCard } from "vuetify/lib";
 
