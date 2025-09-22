@@ -1,4 +1,4 @@
-import { TaskList as TodoListOriginal } from "@tiptap/extension-list";
+import { TaskList as TaskListOriginal } from "@tiptap/extension-list";
 
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
@@ -8,16 +8,16 @@ import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/Extension
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 import I18nText from "@/i18n/I18nText";
 
-export default class TodoList extends AbstractExtension {
+export default class TaskList extends AbstractExtension {
   constructor(options: any) {
-    super(options, TodoListOriginal);
+    super(options, TaskListOriginal);
   }
 
   get availableActions(): ExtensionActionInterface[] {
     return [
       {
         render: new ExtensionActionRenderBtn({
-          tooltip: new I18nText("extensions.TodoList.buttons.todoList.tooltip"),
+          tooltip: new I18nText("extensions.TaskList.buttons.taskList.tooltip"),
           icons: {
             [VuetifyIconsGroups.md]: new VuetifyIcon("check_box"),
             [VuetifyIconsGroups.fa]: new VuetifyIcon("fas fa-tasks"),

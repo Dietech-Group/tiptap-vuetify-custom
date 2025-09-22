@@ -131,9 +131,9 @@ export default {
         },
       },
     },
-    TodoList: {
+    TaskList: {
       buttons: {
-        todoList: {
+        taskList: {
           tooltip: "Att göra-lista",
         },
       },

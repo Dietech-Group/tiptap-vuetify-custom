@@ -154,9 +154,9 @@ export default {
         },
       },
     },
-    TodoList: {
+    TaskList: {
       buttons: {
-        todoList: {
+        taskList: {
           tooltip: "Todo-Liste",
         },
       },

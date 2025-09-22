@@ -48,8 +48,8 @@ import {
   HorizontalRule,
   History,
   Image,
-  TodoList,
-  TodoItem,
+  TaskList,
+  TaskItem,
   Table,
   TableCell,
   TableHeader,
@@ -85,17 +85,22 @@ export default {
       <p>
         There is always something to do. Thankfully, there are checklists for that. Don't forget to call mom.
       </p>
-      <ul data-type="todo_list">
-        <li data-type="todo_item" data-done="true">
+      <ul data-type="taskList">
+        <li data-checked="false" data-type="taskItem">
+          LoremipsumdolorsitametconsetetursadipscingelitrseddiamnonumyeirmodtemporinviduntutlaboreetdoloremagnaaliquyameratseddiamvoluptuaAtveroeosetaccusametjustoduodoloresetearebumStetclitakasdgubergrennoseatakimatasanctusestLoremipsumdolorsitamet
+        </li>
+      </ul>
+      <ul data-type="taskList">
+        <li data-type="taskItem" data-checked="true">
           Buy beer
         </li>
-        <li data-type="todo_item" data-done="true">
+        <li data-type="taskItem" data-checked="true">
           Buy meat
         </li>
-        <li data-type="todo_item" data-done="true">
+        <li data-type="taskItem" data-checked="true">
           Buy milk
         </li>
-        <li data-type="todo_item" data-done="false">
+        <li data-type="taskItem" data-checked="false">
           Call mom
         </li>
       </ul>
@@ -130,9 +135,9 @@ export default {
       TableCell,
       TableHeader,
       TableRow,
-      TodoList,
+      TaskList,
       [
-        TodoItem,
+        TaskItem,
         {
           options: {
             nested: true,

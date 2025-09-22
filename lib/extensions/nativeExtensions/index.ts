@@ -15,8 +15,8 @@ export { default as HorizontalRule } from "@/extensions/nativeExtensions/Horizon
 export { default as History } from "@/extensions/nativeExtensions/History";
 export { default as Link } from "@/extensions/nativeExtensions/link/Link";
 export { default as Image } from "@/extensions/nativeExtensions/image/Image";
-export { default as TodoList } from "@/extensions/nativeExtensions/TodoList/TodoList";
-export { default as TodoItem } from "@/extensions/nativeExtensions/TodoList/TodoItem";
+export { default as TaskList } from "@/extensions/nativeExtensions/TaskList/TaskList";
+export { default as TaskItem } from "@/extensions/nativeExtensions/TaskList/TaskItem";
 export { default as Table } from "@/extensions/nativeExtensions/table/Table";
 export { default as TableCell } from "@/extensions/nativeExtensions/table/TableCell";
 export { default as TableHeader } from "@/extensions/nativeExtensions/table/TableHeader";

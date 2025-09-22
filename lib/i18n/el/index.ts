@@ -136,9 +136,9 @@ export default {
         },
       },
     },
-    TodoList: {
+    TaskList: {
       buttons: {
-        todoList: {
+        taskList: {
           tooltip: "Λίστα εκκρεμοτήτων",
         },
       },

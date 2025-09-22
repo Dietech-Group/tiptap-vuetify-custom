@@ -135,9 +135,9 @@ export default {
         },
       },
     },
-    TodoList: {
+    TaskList: {
       buttons: {
-        todoList: {
+        taskList: {
           tooltip: "Seznam TODO",
         },
       },
