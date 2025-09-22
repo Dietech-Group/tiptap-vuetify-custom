@@ -1,6 +1,6 @@
 # tiptap-vuetify-custom
 
-This template should help get you started developing with Vue 3 in Vite.
+A customized tiptap ui based [tiptap-vuetify](https://github.com/iliyaZelenko/tiptap-vuetify). It depends on vue 2 and vuetify 2.  
 
 ## Recommended IDE Setup
 
