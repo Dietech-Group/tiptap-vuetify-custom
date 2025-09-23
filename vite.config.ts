@@ -30,16 +30,16 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./lib", import.meta.url)),
-        "src": fileURLToPath(new URL("./src", import.meta.url)),
-        "dist": fileURLToPath(new URL("./dist", import.meta.url)),
+        src: fileURLToPath(new URL("./src", import.meta.url)),
+        dist: fileURLToPath(new URL("./dist", import.meta.url)),
       },
     },
     css: {
       preprocessorOptions: {
         sass: {
           verbose: true,
-          silenceDeprecations: ['global-builtin', 'import', 'slash-div'],
-          api: 'modern-compiler',
+          silenceDeprecations: ["global-builtin", "import", "slash-div"],
+          api: "modern-compiler",
         },
       },
     },
@@ -92,9 +92,9 @@ export default defineConfig(({ mode }) => {
           "@floating-ui/dom",
           "@floating-ui/utils",
 
-          'prosemirror-model',
-          'prosemirror-state',
-          'prosemirror-transform',
+          "prosemirror-model",
+          "prosemirror-state",
+          "prosemirror-transform",
         ],
         //Add this so the UMD build will recognize the global variables
         //of externalized dependencies
@@ -140,9 +140,9 @@ export default defineConfig(({ mode }) => {
             "@floating-ui/dom": "floatingUIDom",
             "@floating-ui/utils": "floatingUIUtils",
 
-            'prosemirror-model': 'ProseMirrorModel',
-            'prosemirror-state': 'ProseMirrorState',
-            'prosemirror-transform': 'ProseMirrorTransform',
+            "prosemirror-model": "ProseMirrorModel",
+            "prosemirror-state": "ProseMirrorState",
+            "prosemirror-transform": "ProseMirrorTransform",
           },
           exports: "named",
           plugins: [

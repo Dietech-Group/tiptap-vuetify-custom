@@ -33,7 +33,7 @@ export default class Table extends AbstractExtension {
           },
           nativeExtensionName,
           async onClick({ editor }) {
-             // @ts-ignore
+            // @ts-ignore
             const WindowComponent = Vue.extend(TableWindow);
             const instance = new WindowComponent({
               vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
