@@ -1,5 +1,9 @@
 <template>
-  <node-view-wrapper as="li" :data-checked="node.attrs.checked">
+  <node-view-wrapper
+    as="li"
+    :data-checked="node.attrs.checked"
+    data-type="taskItem"
+  >
     <v-checkbox
       class="mr-1"
       hide-details
