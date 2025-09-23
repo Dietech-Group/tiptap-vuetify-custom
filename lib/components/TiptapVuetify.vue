@@ -345,15 +345,28 @@ export default defineComponent({
   h1,
   h2,
   h3,
+  h4,
+  p,
+  blockquote,
+  pre,
+  ul,
+  ol,
+  .tableWrapper {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  h1,
+  h2,
+  h3,
   h4 {
-    margin: 10px 0 20px !important;
+    margin-top: 20px !important;
   }
 
   blockquote {
     border-left: 0.25em solid #dfe2e5;
     color: #6a737d;
     padding-left: 1em;
-    margin: 20px 0 !important;
   }
 
   code {
@@ -373,8 +386,6 @@ export default defineComponent({
   }
 
   p {
-    margin-top: 16px !important;
-    margin-bottom: 16px !important;
     /* Without this, the empty <p> in the preview will not take up space (so that it looks like an empty line) as it does in the editor */
     min-height: 1rem;
 
@@ -442,7 +453,6 @@ export default defineComponent({
   }
 
   .tableWrapper {
-    margin: 1em 0;
     overflow-x: auto;
   }
 
@@ -468,7 +478,8 @@ export default defineComponent({
   ul,
   ol {
     padding: 0 1rem;
-    margin: 1.25rem 1rem 1.25rem 0.4rem;
+    margin-left: 0.4rem;
+    margin-right: 1rem;
 
     li p {
       margin-top: 0.25em !important;
