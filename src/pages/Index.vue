@@ -89,8 +89,6 @@ export default {
         <li data-checked="false" data-type="taskItem">
           LoremipsumdolorsitametconsetetursadipscingelitrseddiamnonumyeirmodtemporinviduntutlaboreetdoloremagnaaliquyameratseddiamvoluptuaAtveroeosetaccusametjustoduodoloresetearebumStetclitakasdgubergrennoseatakimatasanctusestLoremipsumdolorsitamet
         </li>
-      </ul>
-      <ul data-type="taskList">
         <li data-type="taskItem" data-checked="true">
           Buy beer
         </li>
