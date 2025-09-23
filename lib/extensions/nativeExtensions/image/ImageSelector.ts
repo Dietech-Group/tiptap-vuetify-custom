@@ -7,6 +7,8 @@ import {
 
 import type ImageSource from "./ImageSource";
 
+class CancelFileInputError extends Error {};
+
 export default class ImageSelector {
   private readonly editor: any;
   private readonly fileTypes: FileTypesType;
@@ -55,7 +57,7 @@ export default class ImageSelector {
             if (!changeTriggered) {
               const el = document.getElementById(input.id);
               if (el) {
-                reject(new Error());
+                reject(new CancelFileInputError());
                 // remove dom
                 document.body.removeChild(el);
               }
@@ -89,7 +91,10 @@ export default class ImageSelector {
           })
           .catch((error) => console.error(error));
       }
-    });
+    }).catch(error => {
+      // ignore CancelFileInputError
+      if (!(error instanceof CancelFileInputError)) throw error;
+    }); 
   }
 
   async readFiles(files: File[]): Promise<ImageSource[]> {
