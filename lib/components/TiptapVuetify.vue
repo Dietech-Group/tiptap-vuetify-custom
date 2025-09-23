@@ -494,33 +494,33 @@ export default defineComponent({
         margin-top: 0;
       }
 
+      &:not([data-node-view-wrapper]) {
+        &::before {
+          margin-right: 0.5em;
+          font-size: 24px;
+          line-height: 24px;
+
+          display: inline-block;
+          font: normal normal normal 24px/1 "Material Design Icons";
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: "\F0131";
+        }
+
+        &[data-checked="true"]::before {
+          content: "\F0132";
+          color: #1976d2 !important;
+          caret-color: #1976d2 !important;
+        }
+      }
+
       > label {
         user-select: none;
 
         > input {
           display: none;
         }
-
-        > span {
-          margin-right: 0.5em;
-          font-size: 24px;
-          line-height: 24px;
-
-          &:before {
-            display: inline-block;
-            font: normal normal normal 24px/1 "Material Design Icons";
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            content: "\F0131";
-          }
-        }
-      }
-
-      &[data-checked="true"] > label > span:before {
-        content: "\F0132";
-        color: #1976d2 !important;
-        caret-color: #1976d2 !important;
       }
 
       > div:not(.v-input--checkbox) {
