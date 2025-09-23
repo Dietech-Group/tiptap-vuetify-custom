@@ -13,6 +13,7 @@ import {
   filterImages,
 } from "./ImageHelper";
 import ImageView from "./ImageView.vue";
+import { VueConstructor } from "vue";
 
 export interface ExtendedImageOptions extends Partial<ImageOptions> {
   /**
@@ -54,8 +55,7 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
     };
   },
   addNodeView() {
-    // @ts-ignore
-    return VueNodeViewRenderer(ImageView);
+    return VueNodeViewRenderer(ImageView as unknown as VueConstructor);
   },
   addProseMirrorPlugins() {
     const options = this.options;

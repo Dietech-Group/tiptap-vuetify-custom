@@ -167,6 +167,7 @@ export default {
         Image,
         {
           options: {
+            inline: true,
             maxFileSize: 1048576,
             filterErrorFunc: (type, file) => {
               console.log(type, file);

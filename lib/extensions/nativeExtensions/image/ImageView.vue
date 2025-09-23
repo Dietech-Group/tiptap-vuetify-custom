@@ -1,14 +1,14 @@
 <template>
-  <node-view-wrapper>
-    <img
-      :src="node.attrs.src"
-      :alt="node.attrs.alt"
-      :title="node.attrs.title"
-      :class="{
-        'tiptap-vuetify__custom-image': !!node.attrs['data-high-res-src'],
-      }"
-      @click="onClick"
-    />
+  <node-view-wrapper
+    as="img"
+    :src="node.attrs.src"
+    :alt="node.attrs.alt"
+    :title="node.attrs.title"
+    :class="{
+      'tiptap-vuetify__custom-image': !!node.attrs['data-high-res-src'],
+    }"
+    @click="onClick"
+  >
   </node-view-wrapper>
 </template>
 
