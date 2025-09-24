@@ -13,6 +13,7 @@ import I18nText from "@/i18n/I18nText";
 
 export default class Mention extends AbstractExtension {
   constructor(options: any) {
+    options = options || {};
     if (!Object.prototype.hasOwnProperty.call(options, "suggestion")) {
       options = { ...options, suggestion };
     } else {
