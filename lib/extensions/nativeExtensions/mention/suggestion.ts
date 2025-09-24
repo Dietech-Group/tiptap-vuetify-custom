@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
 
 import {
   type SuggestionProps,
@@ -7,7 +7,6 @@ import {
 import { VueRenderer } from "@tiptap/vue-2";
 
 import MentionWindow from "./MentionWindow.vue";
-import { VueConstructor } from "vue/types/umd";
 
 export default {
   render: () => {
@@ -15,8 +14,8 @@ export default {
 
     return {
       onStart(props: SuggestionProps) {
-        // @ts-ignore
-        component = new VueRenderer(MentionWindow, {
+
+        component = new VueRenderer(MentionWindow  as unknown as VueConstructor, {
           vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
           propsData: props,
         });
@@ -30,8 +29,7 @@ export default {
 
       onKeyDown(props: SuggestionKeyDownProps): boolean {
         if (component?.ref) {
-          // @ts-ignore
-          return component.ref.onKeyDown(props);
+          return (component.ref as unknown as typeof MentionWindow).onKeyDown(props);
         }
 
         return false;

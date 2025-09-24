@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
 
 import { Table as TableOriginal } from "@tiptap/extension-table";
 
@@ -33,8 +33,7 @@ export default class Table extends AbstractExtension {
           },
           nativeExtensionName,
           async onClick({ editor }) {
-            // @ts-ignore
-            const WindowComponent = Vue.extend(TableWindow);
+            const WindowComponent = Vue.extend(TableWindow as unknown as VueConstructor);
             const instance = new WindowComponent({
               vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
               propsData: {
