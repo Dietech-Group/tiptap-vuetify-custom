@@ -7,8 +7,6 @@ import { mergeAttributes } from "@tiptap/core";
 import CustomTaskItemComponent from "./CustomTaskItemComponent.vue";
 
 export default TaskItemOriginal.extend({
-  draggable: true,
-
   // Override original from @tiptap/extension-list/src/task-item/task-item.ts
   renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
     return [
