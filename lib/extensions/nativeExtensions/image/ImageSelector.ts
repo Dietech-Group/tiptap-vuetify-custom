@@ -7,7 +7,7 @@ import {
 
 import type ImageSource from "./ImageSource";
 
-class CancelFileInputError extends Error {};
+class CancelFileInputError extends Error {}
 
 export default class ImageSelector {
   private readonly editor: any;
@@ -68,33 +68,35 @@ export default class ImageSelector {
       );
 
       input.click();
-    }).then((files) => {
-      if (files) {
-        this.readFiles(
-          filterImages(
-            Array.from(files),
-            this.fileTypes,
-            this.maxFileSize,
-            this.filterErrorFunc,
-          ),
-        )
-          .then((sources) => {
-            this.editor
-              .chain()
-              .focus()
-              .insertContent(
-                sources.map((source) => {
-                  return { type: "customImage", attrs: source };
-                }),
-              )
-              .run();
-          })
-          .catch((error) => console.error(error));
-      }
-    }).catch(error => {
-      // ignore CancelFileInputError
-      if (!(error instanceof CancelFileInputError)) throw error;
-    }); 
+    })
+      .then((files) => {
+        if (files) {
+          this.readFiles(
+            filterImages(
+              Array.from(files),
+              this.fileTypes,
+              this.maxFileSize,
+              this.filterErrorFunc,
+            ),
+          )
+            .then((sources) => {
+              this.editor
+                .chain()
+                .focus()
+                .insertContent(
+                  sources.map((source) => {
+                    return { type: "customImage", attrs: source };
+                  }),
+                )
+                .run();
+            })
+            .catch((error) => console.error(error));
+        }
+      })
+      .catch((error) => {
+        // ignore CancelFileInputError
+        if (!(error instanceof CancelFileInputError)) throw error;
+      });
   }
 
   async readFiles(files: File[]): Promise<ImageSource[]> {

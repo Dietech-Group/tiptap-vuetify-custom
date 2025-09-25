@@ -15,11 +15,19 @@ export default class Mention extends AbstractExtension {
   constructor(options: any) {
     options = options || {};
     if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
-      options.suggestions = options.suggestions.map((suggestion: any) => 
-        Object.assign({}, createDefaultSuggestionOptions(suggestion.menuContent), suggestion)
-      )
+      options.suggestions = options.suggestions.map((suggestion: any) =>
+        Object.assign(
+          {},
+          createDefaultSuggestionOptions(suggestion.menuContent),
+          suggestion,
+        ),
+      );
     } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
-      options.suggestion = Object.assign({}, createDefaultSuggestionOptions(options.menuContent), options.suggestion);
+      options.suggestion = Object.assign(
+        {},
+        createDefaultSuggestionOptions(options.menuContent),
+        options.suggestion,
+      );
     }
     super(options, MentionOriginal);
   }

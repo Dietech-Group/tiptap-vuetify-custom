@@ -9,12 +9,12 @@ import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/Extension
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 import I18nText from "@/i18n/I18nText";
 
-// TODO текст перед / после иконки. Сделать через массив: [new VuetifyIcon('code'), new TextForIcon('text')]
+// TODO text before/after the icon. Do this via an array: [new VuetifyIcon('code'), new TextForIcon('text')]
 export default class CodeBlock extends AbstractExtension {
   constructor(options: any) {
     super(
       options,
-      options?.hasOwnProperty("lowlight")
+      Object.prototype.hasOwnProperty.call(options, "lowlight")
         ? CodeBlockLowlightOriginal
         : CodeBlockOriginal,
     );

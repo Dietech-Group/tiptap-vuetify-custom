@@ -1,4 +1,4 @@
-<!-- eslint-disable vue/multi-word-component-names -->
+<!-- eslint-disable vue/multi-word-component-names vue/no-v-html -->
 <template>
   <div>
     <!-- :toolbar-attributes="{ color: 'yellow' }"

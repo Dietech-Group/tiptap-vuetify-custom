@@ -40,7 +40,9 @@ export default class Link extends AbstractExtension {
           nativeExtensionName,
           onClick({ editor }) {
             const href = editor.getAttributes(nativeExtensionName).href;
-            const LinkWindowComponent = Vue.extend(LinkWindow as unknown as VueConstructor);
+            const LinkWindowComponent = Vue.extend(
+              LinkWindow as unknown as VueConstructor,
+            );
             const instance = new LinkWindowComponent({
               vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
               propsData: {

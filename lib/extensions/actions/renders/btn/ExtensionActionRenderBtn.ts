@@ -1,4 +1,5 @@
 import type { ExtensionActionRenderBtnOptionsInterface } from "@/extensions/actions/renders/btn/ExtensionActionRenderBtnOptionsInterface";
+import { UnionCommands } from "@tiptap/core";
 
 type OptionalOptionsType = "onClick" | "isActive";
 
@@ -19,12 +20,11 @@ export default class ExtensionActionRenderBtn {
     this.options = {
       onClick({ editor }) {
         if (options.onClickCommand) {
-          // @ts-expect-error
-          editor
-            .chain()
-            .focus()
-            [options.onClickCommand](options.onClickOptions)
-            .run();
+          (
+            editor.chain().focus()[
+              options.onClickCommand as keyof UnionCommands
+            ] as any
+          )(options.onClickOptions)?.run();
         }
       },
       isActive(editor) {
