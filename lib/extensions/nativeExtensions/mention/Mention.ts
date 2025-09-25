@@ -1,7 +1,7 @@
 import { Mention as MentionOriginal } from "@tiptap/extension-mention";
 import { type Editor } from "@tiptap/vue-2";
 
-import suggestion from "./suggestion";
+import createDefaultSuggestionOptions from "./DefaultSuggestionOptions";
 
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
@@ -14,10 +14,12 @@ import I18nText from "@/i18n/I18nText";
 export default class Mention extends AbstractExtension {
   constructor(options: any) {
     options = options || {};
-    if (!Object.prototype.hasOwnProperty.call(options, "suggestion")) {
-      options = { ...options, suggestion };
-    } else {
-      options.suggestion = { ...options.suggestion, ...suggestion };
+    if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
+      options.suggestions = options.suggestions.map((suggestion: any) => 
+        Object.assign({}, createDefaultSuggestionOptions(suggestion.menuContent), suggestion)
+      )
+    } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
+      options.suggestion = Object.assign({}, createDefaultSuggestionOptions(options.menuContent), options.suggestion);
     }
     super(options, MentionOriginal);
   }

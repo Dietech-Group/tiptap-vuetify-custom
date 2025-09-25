@@ -28,6 +28,8 @@ import dockerfile from "highlight.js/lib/languages/dockerfile";
 import { common, createLowlight } from "lowlight";
 
 // import FileSelector from '../Components/FileSelector'
+import SuggestionListCustom from "../Components/SuggestionListCustom.vue";
+
 import MyCustomExtension from "../MyCustomExtension";
 import {
   TiptapVuetify,
@@ -67,13 +69,6 @@ export default {
     TiptapVuetify,
   },
   data: () => ({
-    // editorProperties: {
-    //   editorProps: {
-    //     handleKeyDown (a, b, c) {
-    //       console.log('handleKeyDown', a, b, c)
-    //     }
-    //   }
-    // },
     extensions: null,
     content: `
       <h1>Yay Headlines!</h1>
@@ -118,6 +113,34 @@ export default {
         </tr>
       </table>
     `,
+    mentionItemsAll: [
+      "Lea Thompson",
+      "Cyndi Lauper",
+      "Tom Cruise",
+      "Madonna",
+      "Jerry Hall",
+      "Joan Collins",
+      "Winona Ryder",
+      "Christina Applegate",
+      "Alyssa Milano",
+      "Molly Ringwald",
+      "Ally Sheedy",
+      "Debbie Harry",
+      "Olivia Newton-John",
+      "Elton John",
+      "Michael J. Fox",
+      "Axl Rose",
+      "Emilio Estevez",
+      "Ralph Macchio",
+      "Rob Lowe",
+      "Jennifer Grey",
+      "Mickey Rourke",
+      "John Cusack",
+      "Matthew Broderick",
+      "Justine Bateman",
+      "Lisa Bonet",
+    ],
+    pageSize: 5,
   }),
   created() {
     this.extensions = [
@@ -212,43 +235,54 @@ export default {
               class: "mention",
             },
             deleteTriggerWithBackspace: true,
-            suggestion: {
-              items: ({ query }) => {
-                query = query || "";
-                return [
-                  "Lea Thompson",
-                  "Cyndi Lauper",
-                  "Tom Cruise",
-                  "Madonna",
-                  "Jerry Hall",
-                  "Joan Collins",
-                  "Winona Ryder",
-                  "Christina Applegate",
-                  "Alyssa Milano",
-                  "Molly Ringwald",
-                  "Ally Sheedy",
-                  "Debbie Harry",
-                  "Olivia Newton-John",
-                  "Elton John",
-                  "Michael J. Fox",
-                  "Axl Rose",
-                  "Emilio Estevez",
-                  "Ralph Macchio",
-                  "Rob Lowe",
-                  "Jennifer Grey",
-                  "Mickey Rourke",
-                  "John Cusack",
-                  "Matthew Broderick",
-                  "Justine Bateman",
-                  "Lisa Bonet",
-                ]
-                  .filter((item) =>
-                    item.toLowerCase().startsWith(query.toLowerCase()),
-                  )
-                  .slice(0, 10);
+            suggestions: [
+              {
+                char: "@",
+                items: ({ query }) => {
+                  query = query || "";
+                  return this.mentionItemsAll
+                    .filter((item) =>
+                      item.toLowerCase().startsWith(query.toLowerCase()),
+                    )
+                    .slice(0, 10);
+                },
+                allowSpaces: true,
               },
-              allowSpaces: true,
-            },
+              {
+                char: "#",
+                menuContent: {
+                  component: SuggestionListCustom,
+                  listeners: {
+                    load: ({ query, page, callback }) => {
+                      const filteredItems = this.mentionItemsAll.filter(
+                        (item) =>
+                          item.toLowerCase().startsWith(query.toLowerCase()),
+                      );
+
+                      if (
+                        page < Math.ceil(filteredItems.length / this.pageSize)
+                      ) {
+                        const loadedItems = filteredItems.slice(
+                          page * this.pageSize,
+                          Math.min(
+                            (page + 1) * this.pageSize,
+                            filteredItems.length,
+                          ),
+                        );
+
+                        callback(
+                          loadedItems,
+                          page,
+                          this.pagesLoaded >=
+                            Math.ceil(filteredItems.length / this.pageSize),
+                        );
+                      }
+                    },
+                  },
+                },
+                allowSpaces: true,
+              },
+            ],
           },
         },
       ],
