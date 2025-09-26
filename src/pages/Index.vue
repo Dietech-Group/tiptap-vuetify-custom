@@ -29,6 +29,7 @@ import { common, createLowlight } from "lowlight";
 
 // import FileSelector from '../Components/FileSelector'
 import SuggestionListCustom from "../Components/SuggestionListCustom.vue";
+import CustomMentionExtension from "src/extensions/CustomMentionExtension";
 
 import MyCustomExtension from "../extensions/MyCustomExtension";
 import {
@@ -74,7 +75,7 @@ export default {
       <h1>Yay Headlines!</h1>
       <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image from picsum">
       <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
-      <p><span data-type="mention" data-id="Christina Applegate"></span></p>
+      <p><mention data-type="mention" data-id="1" data-label="Christina Applegate">@Christina Applegate</mention></p>
       <blockquote>Test quote.</blockquote>
       <p>All these <strong>cool tags</strong> are working now.</p>
       <p>
@@ -231,6 +232,7 @@ export default {
         Mention,
         {
           options: {
+            nativeExtension: CustomMentionExtension,
             HTMLAttributes: {
               class: "mention",
             },
@@ -254,10 +256,15 @@ export default {
                   component: SuggestionListCustom,
                   listeners: {
                     load: ({ query, page, callback }) => {
-                      const filteredItems = this.mentionItemsAll.filter(
-                        (item) =>
-                          item.toLowerCase().startsWith(query.toLowerCase()),
-                      );
+                      const filteredItems = this.mentionItemsAll
+                        .map((item, index) => {
+                          return { id: index.toString(), label: item };
+                        })
+                        .filter((item) =>
+                          item.label
+                            .toLowerCase()
+                            .startsWith(query.toLowerCase()),
+                        );
 
                       if (
                         page < Math.ceil(filteredItems.length / this.pageSize)

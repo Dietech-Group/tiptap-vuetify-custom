@@ -15,26 +15,35 @@ import createDefaultSuggestionOptions from "./DefaultSuggestionOptions";
 export default class Mention extends AbstractExtension {
   constructor(options: any) {
     options = options || {};
+    const nativeExtension = options.nativeExtension || MentionOriginal;
+    delete options.nativeExtension;
+
     if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
-      options.suggestions = options.suggestions.map((suggestion: any) =>
-        Object.assign(
+      options.suggestions = options.suggestions.map((suggestion: any) => {
+        const menuContent = suggestion.menuContent;
+        delete suggestion.menuContent;
+        return Object.assign(
           {},
-          createDefaultSuggestionOptions(suggestion.menuContent),
+          createDefaultSuggestionOptions(menuContent),
           suggestion,
-        ),
-      );
+        );
+      });
     } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
+      const menuContent = options.suggestion.menuContent;
+      delete options.suggestion.menuContent;
+
       options.suggestion = Object.assign(
         {},
-        createDefaultSuggestionOptions(options.menuContent),
+        createDefaultSuggestionOptions(menuContent),
         options.suggestion,
       );
     }
-    super(options, MentionOriginal);
+
+    super(options, nativeExtension);
   }
 
   get availableActions(): ExtensionActionInterface[] {
-    const nativeExtensionName = "mention";
+    const nativeExtensionName = this.nativeExtensionInstance.name;
 
     return [
       {

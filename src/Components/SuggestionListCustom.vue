@@ -9,7 +9,7 @@
           class="lighten-4"
           @click="selectItem(index)"
         >
-          {{ item }}
+          {{ itemLabel(item) }}
         </v-list-item>
       </v-list-item-group>
     </template>
@@ -82,6 +82,14 @@ export default defineComponent({
     typeOf(item: string) {
       return item.length <= 10 ? "short" : "long";
     },
+    itemId(item: any) {
+      return Object.prototype.hasOwnProperty.call(item, "id") ? item.id : item;
+    },
+    itemLabel(item: any) {
+      return Object.prototype.hasOwnProperty.call(item, "label")
+        ? item.label
+        : item;
+    },
     onKeyDown({ event }: { event: KeyboardEvent }): boolean {
       if (this.itemsInternal.length > 0) {
         if (event.key === "ArrowUp") {
@@ -140,7 +148,7 @@ export default defineComponent({
       const item = this.itemsInternal[index];
 
       if (item) {
-        this.command({ id: item });
+        this.command({ id: this.itemId(item), label: this.itemLabel(item) });
       }
     },
   },
