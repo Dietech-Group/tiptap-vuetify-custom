@@ -12,6 +12,7 @@ import I18nText from "@/i18n/I18nText";
 // TODO text before/after the icon. Do this via an array: [new VuetifyIcon('code'), new TextForIcon('text')]
 export default class CodeBlock extends AbstractExtension {
   constructor(options: any) {
+    options = options || {};
     super(
       options,
       Object.prototype.hasOwnProperty.call(options, "lowlight")
