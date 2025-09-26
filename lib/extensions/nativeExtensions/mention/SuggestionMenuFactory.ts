@@ -58,22 +58,27 @@ export function createSuggestionMenu(
       },
     },
     computed: {
-      clientRectInternal(): () => DOMRect | null {
-        return this.clientRect ?? (() => new DOMRect());
+      editorParentElement() {
+        return this.editor.options.element?.closest(".tiptap-vuetify-editor");
       },
-      left(): number {
-        return (
-          (this.editor.options?.element?.getBoundingClientRect()?.x ?? 0) + 25
-        );
+      margin() {
+        return 25;
       },
       top(): number {
-        const rect = this.clientRectInternal();
-        return rect!.y + rect!.height + 8;
+        const editorRect = this.editorParentElement?.getBoundingClientRect();
+        const nodeRect = (this.clientRect ?? (() => new DOMRect()))();
+        return (
+          (nodeRect?.top || 0) +
+          (nodeRect?.height || 0) -
+          (editorRect?.top || 0) +
+          8
+        );
       },
       width(): number {
         return (
           ((this.editor.options?.element as HTMLElement | undefined)
-            ?.offsetWidth || 0) - 50
+            ?.offsetWidth || 0) -
+          this.margin * 2
         );
       },
     },
@@ -94,9 +99,10 @@ export function createSuggestionMenu(
         {
           props: {
             value: true,
-            positionX: this.left,
+            positionX: this.margin,
             positionY: this.top,
             absolute: true,
+            attach: this.editorParentElement,
             minWidth: this.width,
             maxWidth: this.width,
             closeOnClick: false,
