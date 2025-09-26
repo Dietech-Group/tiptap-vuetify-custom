@@ -248,7 +248,6 @@ export default defineComponent({
     ];
 
     if (this[PROPS.PLACEHOLDER]) {
-      // !!!!!!!!!!!!!!!!! TODO ONLY FOR TEST (update: I don't remember what this is, maybe there's no need to remove the code below)
       extensions.push(
         Placeholder.configure({
           emptyNodeClass: "tiptap-vuetify-editor__paragraph--is-empty",
@@ -334,7 +333,7 @@ export default defineComponent({
   overflow: auto !important;
   padding: 5px;
 
-  :first-child {
+  :first-child:not(.ProseMirror) {
     margin-top: 0 !important;
   }
 
@@ -392,7 +391,7 @@ export default defineComponent({
     // placeholder
     &.tiptap-vuetify-editor__paragraph--is-empty {
       &:first-child::before {
-        content: attr(data-empty-text);
+        content: attr(data-placeholder);
         float: left;
         color: #aaa;
         pointer-events: none;
