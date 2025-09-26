@@ -30,7 +30,7 @@ import { common, createLowlight } from "lowlight";
 // import FileSelector from '../Components/FileSelector'
 import SuggestionListCustom from "../Components/SuggestionListCustom.vue";
 
-import MyCustomExtension from "../MyCustomExtension";
+import MyCustomExtension from "../extensions/MyCustomExtension";
 import {
   TiptapVuetify,
   Heading,
