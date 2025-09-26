@@ -6,7 +6,7 @@ export const enum VuetifyIconsGroups {
   mdi = "mdi",
   fa = "fa",
   /*
-    Для получения mdiSvg иконки, можно в RunKit запустить код:
+    To get an mdiSvg icon, you can run the code in RunKit
     const js = require("@mdi/js")
     console.log(js.mdiClose)
    */
