@@ -1,15 +1,16 @@
 import { Mention as MentionOriginal } from "@tiptap/extension-mention";
+
 import { type Editor } from "@tiptap/vue-2";
 
-import createDefaultSuggestionOptions from "./DefaultSuggestionOptions";
-
+import AbstractExtension from "@/extensions/AbstractExtension";
+import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
 import { VuetifyIconsGroups } from "@/configs/theme";
-import AbstractExtension from "@/extensions/AbstractExtension";
-import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 import I18nText from "@/i18n/I18nText";
+
+import createDefaultSuggestionOptions from "./DefaultSuggestionOptions";
 
 export default class Mention extends AbstractExtension {
   constructor(options: any) {

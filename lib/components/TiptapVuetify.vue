@@ -373,6 +373,12 @@ export default defineComponent({
     margin: 0 5px !important;
   }
 
+  span.mention {
+    padding: 2px 8px;
+    background-color: #eee;
+    border-radius: 1em;
+  }
+
   pre code {
     padding: 8px !important;
     margin: 0 5px !important;
