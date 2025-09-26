@@ -280,8 +280,8 @@ export default {
                         callback(
                           loadedItems,
                           page,
-                          this.pagesLoaded >=
-                            Math.ceil(filteredItems.length / this.pageSize),
+                          page >=
+                            Math.ceil(filteredItems.length / this.pageSize) - 1,
                         );
                       }
                     },
