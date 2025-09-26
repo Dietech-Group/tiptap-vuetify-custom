@@ -28,7 +28,7 @@ import dockerfile from "highlight.js/lib/languages/dockerfile";
 import { common, createLowlight } from "lowlight";
 
 // import FileSelector from '../Components/FileSelector'
-import SuggestionListCustom from "../Components/SuggestionListCustom.vue";
+import CustomSuggestionList from "../Components/CustomSuggestionList.vue";
 import CustomMentionExtension from "src/extensions/CustomMentionExtension";
 
 import MyCustomExtension from "../extensions/MyCustomExtension";
@@ -253,7 +253,7 @@ export default {
               {
                 char: "#",
                 menuContent: {
-                  component: SuggestionListCustom,
+                  component: CustomSuggestionList,
                   listeners: {
                     load: ({ query, page, callback }) => {
                       const filteredItems = this.mentionItemsAll
