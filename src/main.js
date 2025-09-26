@@ -34,8 +34,6 @@ import App from "./App.vue";
 import { TiptapVuetifyPlugin } from "src/lib";
 import router from "./router.js";
 
-// import "../dist/bundle.css";
-
 const vuetify = new Vuetify({
   lang: {
     current: "de", // en | es | fr | pl | ru | uk | ptbr | tr | he | nl | ja | de | ko | zhHans | fa | sv | cs | it | el
