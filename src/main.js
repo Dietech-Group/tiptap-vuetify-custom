@@ -5,6 +5,7 @@ import Router from "vue-router";
 import Vuetify, {
   // Components used in demo
   VApp,
+  VAlert,
   VMain,
   VContainer,
   // Components used in this package
@@ -13,6 +14,7 @@ import Vuetify, {
   VCardTitle,
   VCardText,
   VCardActions,
+  VCheckbox,
   VBtn,
   VSpacer,
   VIcon,
@@ -45,8 +47,10 @@ Vue.use(Vuetify, {
   components: {
     // Components used in demo
     VApp,
+    VAlert,
     VMain,
     VContainer,
+    VCheckbox,
     // Components used in this package
     VDialog,
     VCard,

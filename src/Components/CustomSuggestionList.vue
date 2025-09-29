@@ -9,7 +9,7 @@
           class="lighten-4"
           @click="selectItem(index)"
         >
-          {{ itemLabel(item) }}
+          {{ isString(item) ? item : item.label || item.id }}
         </v-list-item>
       </v-list-item-group>
     </template>
@@ -38,6 +38,10 @@ export default defineComponent({
     query: {
       type: String as PropType<SuggestionProps["query"]>,
       default: "",
+    },
+    customProps: {
+      type: Object,
+      default: undefined,
     },
   },
   data() {
@@ -82,13 +86,8 @@ export default defineComponent({
     typeOf(item: string) {
       return item.length <= 10 ? "short" : "long";
     },
-    itemId(item: any) {
-      return Object.prototype.hasOwnProperty.call(item, "id") ? item.id : item;
-    },
-    itemLabel(item: any) {
-      return Object.prototype.hasOwnProperty.call(item, "label")
-        ? item.label
-        : item;
+    isString(item: any) {
+      return typeof item === "string";
     },
     onKeyDown({ event }: { event: KeyboardEvent }): boolean {
       if (this.itemsInternal.length > 0) {
@@ -148,7 +147,9 @@ export default defineComponent({
       const item = this.itemsInternal[index];
 
       if (item) {
-        this.command({ id: this.itemId(item), label: this.itemLabel(item) });
+        this.command(
+          this.isString(item) ? { id: item, label: item, type: "user" } : item,
+        );
       }
     },
   },

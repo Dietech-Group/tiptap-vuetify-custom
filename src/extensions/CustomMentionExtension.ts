@@ -1,34 +1,60 @@
 import { VueConstructor } from "vue";
 
-import {
-  Mention as MentionOriginal,
-  type MentionOptions,
-} from "@tiptap/extension-mention";
-import { Node as ProseMirrorNode } from "@tiptap/pm/model";
-import type { SuggestionOptions } from "@tiptap/suggestion";
-import { mergeAttributes } from "@tiptap/core";
+import { Mention as MentionOriginal } from "@tiptap/extension-mention";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 
 import CustomMentionNodeComponent from "../Components/CustomMentionNodeComponent.vue";
 
+function mentionType2Char(type: string | null) {
+  switch (type) {
+    case "user":
+      return "@";
+    default:
+      return null;
+  }
+}
+
 export default MentionOriginal.extend({
-  addOptions() {
+  addAttributes() {
     return {
-      ...this.parent?.(),
-      renderHTML({
-        options,
-        node,
-        suggestion,
-      }: {
-        options: MentionOptions;
-        node: ProseMirrorNode;
-        suggestion: SuggestionOptions | null;
-      }) {
-        return [
-          "mention",
-          mergeAttributes(this.HTMLAttributes ?? {}, options.HTMLAttributes),
-          `${suggestion?.char ?? "@"}${node.attrs.label ?? node.attrs.id}`,
-        ];
+      id: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("m-id"),
+        renderHTML: (attributes) => {
+          if (!attributes.id) {
+            return {};
+          }
+
+          return {
+            "m-id": attributes.id,
+          };
+        },
+      },
+
+      type: {
+        default: "user",
+        parseHTML: (element) => {
+          return element.getAttribute("m-type");
+        },
+        renderHTML: (attributes) => {
+          return {
+            "m-type": attributes.type,
+          };
+        },
+      },
+
+      label: {
+        default: null,
+        parseHTML: (element) => element.innerText,
+        renderHTML: () => {},
+      },
+
+      // When there are multiple types of mentions, this attribute helps distinguish them
+      mentionSuggestionChar: {
+        default: "@",
+        parseHTML: (element) =>
+          mentionType2Char(element.getAttribute("m-type")),
+        renderHTML: () => {},
       },
     };
   },
@@ -36,9 +62,19 @@ export default MentionOriginal.extend({
   parseHTML() {
     return [
       {
-        tag: `mention[data-type="${this.name}"]`,
+        tag: "mention",
       },
     ];
+  },
+
+  renderHTML({
+    node,
+    HTMLAttributes,
+  }: {
+    node: any;
+    HTMLAttributes: Record<string, any>;
+  }) {
+    return ["mention", HTMLAttributes, node.attrs.label];
   },
 
   addNodeView() {

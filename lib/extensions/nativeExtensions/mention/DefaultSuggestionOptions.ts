@@ -1,4 +1,5 @@
-import Vue, { VueConstructor } from "vue";
+import Vue from "vue";
+import { DefaultProps } from "vue/types/options";
 
 import {
   type SuggestionProps,
@@ -13,9 +14,13 @@ import {
 } from "./SuggestionMenuFactory";
 
 export default function createDefaultSuggestionOptions(
-  menuContent: {
-    component: any;
-    listeners: Record<string, (...args: unknown[]) => unknown> | null;
+  menu: {
+    getProps: () => DefaultProps;
+    content: {
+      component: any;
+      listeners: Record<string, (...args: unknown[]) => unknown> | null;
+      getProps: () => DefaultProps;
+    };
   } | null = null,
 ) {
   return {
@@ -25,23 +30,32 @@ export default function createDefaultSuggestionOptions(
       return {
         onStart(sugestionProps: SuggestionProps) {
           const suggestionMenuComponent = createSuggestionMenu(
-            menuContent?.component || (SuggestionList as any),
-            menuContent?.listeners,
+            menu?.content.component || (SuggestionList as any),
+            menu?.content.listeners,
           );
 
-          renderer = new VueRenderer(
-            suggestionMenuComponent as unknown as VueConstructor,
-            {
-              vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
-              propsData: sugestionProps,
+          const vue =
+            (sugestionProps.editor as any).contentComponent?.$options._base ??
+            Vue;
+          renderer = new VueRenderer(vue.extend(suggestionMenuComponent), {
+            vuetify: Vue.prototype.tiptapVuetifyPlugin.vuetify,
+            parent: (sugestionProps.editor as any).contentComponent,
+            propsData: {
+              ...sugestionProps,
+              menuProps: menu?.getProps?.(),
+              contentProps: menu?.content.getProps?.(),
             },
-          );
+          });
 
           document.querySelector("body")?.appendChild(renderer.element);
         },
 
-        onUpdate(props: SuggestionProps) {
-          renderer?.updateProps(props);
+        onUpdate(sugestionProps: SuggestionProps) {
+          renderer?.updateProps({
+            ...sugestionProps,
+            menuProps: menu?.getProps?.(),
+            contentProps: menu?.content.getProps?.(),
+          });
         },
 
         onKeyDown(props: SuggestionKeyDownProps): boolean {
@@ -55,9 +69,11 @@ export default function createDefaultSuggestionOptions(
         },
 
         onExit() {
-          renderer?.element?.parentNode?.removeChild(renderer.element);
-          renderer?.destroy();
-          renderer = null;
+          if (renderer) {
+            renderer.element?.parentNode?.removeChild(renderer.element);
+            renderer.destroy();
+            renderer = null;
+          }
         },
       };
     },

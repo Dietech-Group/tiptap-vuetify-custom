@@ -1,6 +1,22 @@
 <!-- eslint-disable vue/multi-word-component-names vue/no-v-html -->
 <template>
   <div>
+    <v-alert
+      ref="externalMentionMenuAttachElement"
+      border="top"
+      colored-border
+      elevation="2"
+    >
+      <div class="d-flex">
+        <v-checkbox v-model="mentionAttachActive" class="mr-2" />
+        <div class="pt-3">
+          Attach mention menu (for activation char '#') to this box, which makes
+          the menu the same width as this box although the editor is smaller.<br />
+          For the activation char '@' the menu is attached to the editor and
+          therefor get it's with from it.
+        </div>
+      </div>
+    </v-alert>
     <!-- :toolbar-attributes="{ color: 'yellow' }"
     min-height="500"
     max-height="600"
@@ -11,6 +27,8 @@
       v-model="content"
       :extensions="extensions"
       placeholder="Write something …"
+      :max-height="mentionAttachActive ? '300px' : undefined"
+      :style="mentionAttachActive ? 'width: 75%;' : undefined"
       @keydown="onkeydown"
     />
 
@@ -71,11 +89,12 @@ export default {
   },
   data: () => ({
     extensions: null,
+    mentionAttachActive: false,
     content: `
       <h1>Yay Headlines!</h1>
       <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image from picsum">
       <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
-      <p><mention data-type="mention" data-id="1" data-label="Christina Applegate">@Christina Applegate</mention></p>
+      <p><mention m-id="1" m-type="user">Christina Applegate</mention></p>
       <blockquote>Test quote.</blockquote>
       <p>All these <strong>cool tags</strong> are working now.</p>
       <p>
@@ -252,38 +271,55 @@ export default {
               },
               {
                 char: "#",
-                menuContent: {
-                  component: CustomSuggestionList,
-                  listeners: {
-                    load: ({ query, page, callback }) => {
-                      const filteredItems = this.mentionItemsAll
-                        .map((item, index) => {
-                          return { id: index.toString(), label: item };
-                        })
-                        .filter((item) =>
-                          item.label
-                            .toLowerCase()
-                            .startsWith(query.toLowerCase()),
-                        );
+                menu: {
+                  getProps: () => {
+                    return {
+                      ...(this.mentionAttachActive
+                        ? {
+                            attach: () =>
+                              this.$refs.externalMentionMenuAttachElement,
+                          }
+                        : {}),
+                    };
+                  },
+                  content: {
+                    component: CustomSuggestionList,
+                    listeners: {
+                      load: ({ query, page, callback }) => {
+                        const filteredItems = this.mentionItemsAll
+                          .map((item, index) => {
+                            return {
+                              id: index.toString(),
+                              label: item,
+                              type: "user",
+                            };
+                          })
+                          .filter((item) =>
+                            item.label
+                              .toLowerCase()
+                              .startsWith(query.toLowerCase()),
+                          );
 
-                      if (
-                        page < Math.ceil(filteredItems.length / this.pageSize)
-                      ) {
-                        const loadedItems = filteredItems.slice(
-                          page * this.pageSize,
-                          Math.min(
-                            (page + 1) * this.pageSize,
-                            filteredItems.length,
-                          ),
-                        );
+                        if (
+                          page < Math.ceil(filteredItems.length / this.pageSize)
+                        ) {
+                          const loadedItems = filteredItems.slice(
+                            page * this.pageSize,
+                            Math.min(
+                              (page + 1) * this.pageSize,
+                              filteredItems.length,
+                            ),
+                          );
 
-                        callback(
-                          loadedItems,
-                          page,
-                          page >=
-                            Math.ceil(filteredItems.length / this.pageSize) - 1,
-                        );
-                      }
+                          callback(
+                            loadedItems,
+                            page,
+                            page >=
+                              Math.ceil(filteredItems.length / this.pageSize) -
+                                1,
+                          );
+                        }
+                      },
                     },
                   },
                 },

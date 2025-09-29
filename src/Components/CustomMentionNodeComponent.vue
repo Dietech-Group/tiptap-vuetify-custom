@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <node-view-wrapper as="span" class="mention">
-    <mention :m-id="node.attrs.id" m-type="user">
+    <mention :m-id="node.attrs.id" :m-type="node.attrs.type">
       {{ node.attrs.label }}
     </mention>
   </node-view-wrapper>

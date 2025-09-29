@@ -56,28 +56,54 @@ export function createSuggestionMenu(
         type: String as PropType<SuggestionProps["query"]>,
         default: "",
       },
+      menuProps: {
+        type: Object,
+        default: undefined,
+      },
+      contentProps: {
+        type: Object,
+        default: undefined,
+      },
     },
     computed: {
       editorParentElement() {
         return this.editor.options.element?.closest(".tiptap-vuetify-editor");
       },
+      attachedHTMLElement() {
+        if (this.menuProps?.attach) {
+          let attach = this.menuProps?.attach;
+          if (typeof attach === "function") {
+            attach = attach();
+          }
+          if (typeof this.menuProps.attach === "string") {
+            return document.querySelector(this.menuProps.attach);
+          } else if (attach instanceof HTMLElement) {
+            return attach;
+          } else if (attach.$el) {
+            return attach.$el;
+          }
+        }
+
+        return this.editorParentElement;
+      },
       margin() {
         return 25;
       },
       top(): number {
-        const editorRect = this.editorParentElement?.getBoundingClientRect();
+        const attachedElementRect =
+          this.attachedHTMLElement?.getBoundingClientRect();
         const nodeRect = (this.clientRect ?? (() => new DOMRect()))();
         return (
           (nodeRect?.top || 0) +
           (nodeRect?.height || 0) -
-          (editorRect?.top || 0) +
+          (attachedElementRect?.top || 0) +
           8
         );
       },
       width(): number {
         return (
-          ((this.editor.options?.element as HTMLElement | undefined)
-            ?.offsetWidth || 0) -
+          ((this.attachedHTMLElement as HTMLElement | undefined)?.offsetWidth ||
+            0) -
           this.margin * 2
         );
       },
@@ -102,11 +128,9 @@ export function createSuggestionMenu(
             positionX: this.margin,
             positionY: this.top,
             absolute: true,
-            attach: this.editorParentElement,
+            attach: this.attachedHTMLElement,
             minWidth: this.width,
             maxWidth: this.width,
-            closeOnClick: false,
-            closeOnContentClick: false,
             transition: "slide-y-transition",
             contentClass: "suggestion-menu",
           },
@@ -118,6 +142,7 @@ export function createSuggestionMenu(
               items: this.items,
               command: this.command,
               query: this.query,
+              customProps: this.contentProps,
             },
             on: listeners || {},
           }),

@@ -20,21 +20,21 @@ export default class Mention extends AbstractExtension {
 
     if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
       options.suggestions = options.suggestions.map((suggestion: any) => {
-        const menuContent = suggestion.menuContent;
-        delete suggestion.menuContent;
+        const menu = suggestion.menu;
+        delete suggestion.menu;
         return Object.assign(
           {},
-          createDefaultSuggestionOptions(menuContent),
+          createDefaultSuggestionOptions(menu),
           suggestion,
         );
       });
     } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
-      const menuContent = options.suggestion.menuContent;
-      delete options.suggestion.menuContent;
+      const menu = options.suggestion.menu;
+      delete options.suggestion.menu;
 
       options.suggestion = Object.assign(
         {},
-        createDefaultSuggestionOptions(menuContent),
+        createDefaultSuggestionOptions(menu),
         options.suggestion,
       );
     }
