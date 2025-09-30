@@ -259,6 +259,9 @@ export default {
             suggestions: [
               {
                 char: "@",
+                button: {
+                  tooltip: "Nutzer:in erwähnen",
+                },
                 items: ({ query }) => {
                   query = query || "";
                   return this.mentionItemsAll
@@ -271,6 +274,10 @@ export default {
               },
               {
                 char: "#",
+                button: {
+                  icon: "mdi-pound",
+                  tooltip: "Aufgaben erwähnen",
+                },
                 menu: {
                   getProps: () => {
                     return {
