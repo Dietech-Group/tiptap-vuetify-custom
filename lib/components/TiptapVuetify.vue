@@ -483,7 +483,7 @@ export default defineComponent({
   ul,
   ol {
     padding: 0 1rem;
-    margin-left: 0.4rem;
+    margin-left: 10px;
     margin-right: 1rem;
 
     li p {
