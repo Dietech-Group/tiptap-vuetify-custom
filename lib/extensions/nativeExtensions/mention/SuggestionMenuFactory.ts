@@ -67,7 +67,7 @@ export function createSuggestionMenu(
     },
     computed: {
       editorParentElement() {
-        return this.editor.options.element?.closest(".tiptap-vuetify-editor");
+        return this.editor.view.dom.closest(".tiptap-vuetify-editor");
       },
       attachedHTMLElement() {
         if (this.menuProps?.attach) {

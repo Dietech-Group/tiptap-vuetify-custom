@@ -2,6 +2,26 @@
 
 A customized tiptap ui based [tiptap-vuetify](https://github.com/iliyaZelenko/tiptap-vuetify). It depends on vue 2 and vuetify 2.  
 
+## Customized versions of tiptap packages
+
+This project uses a customized version for some tiptap editor packages: [https://github.com/Dietech-Group/tiptap/](https://github.com/Dietech-Group/tiptap/). For every new version a release with `*.tgz` archives for all tiptap packages is created. It's important to use the same package version for all tiptap packages.
+
+Example:
+```
+"@tiptap/core": "3.6.2",
+"@tiptap/suggestion": "https://github.com/Dietech-Group/tiptap/releases/download/v3.6.2-dietech.0/tiptap-suggestion-3.6.2.tgz"
+```
+
+## Releases
+
+To release a new version with a `*.tgz` archive you need to trigger the github release workflow ([release.yml](.github/workflows/release.yml)) with creating a new tag (starting with `v`) and push it.
+
+```
+git tag <tagname>
+git push origin <tagname>
+```
+The `<tagname>` should be `v<package version>` (ex. `v1.1.2`).
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
