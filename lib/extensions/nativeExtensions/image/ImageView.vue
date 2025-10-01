@@ -1,14 +1,15 @@
 <template>
-  <node-view-wrapper
-    as="img"
-    :src="node.attrs.src"
-    :alt="node.attrs.alt"
-    :title="node.attrs.title"
-    :class="{
-      'tiptap-vuetify__custom-image': !!node.attrs['data-high-res-src'],
-    }"
-    @click="onClick"
-  >
+  <node-view-wrapper as="span">
+    <img
+      :src="node.attrs.src"
+      :alt="node.attrs.alt"
+      :title="node.attrs.title"
+      :class="{
+        'tiptap-vuetify__custom-image-with-high-res-src':
+          !!node.attrs['data-high-res-src'],
+      }"
+      @click="onClick"
+    />
   </node-view-wrapper>
 </template>
 
@@ -35,15 +36,14 @@ export default defineComponent({
   },
   methods: {
     onClick() {
-      if (typeof this.node.attrs["data-high-res-src"] === "string")
-        window.open(this.node.attrs["data-high-res-src"], "_blank");
+      if (this.highResSrc) window.open(this.highResSrc, "_blank");
     },
   },
 });
 </script>
 
 <style>
-.tiptap-vuetify__custom-image:hover {
+.tiptap-vuetify__custom-image-with-high-res-src:hover {
   cursor: pointer;
 }
 </style>
