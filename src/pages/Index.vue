@@ -95,6 +95,15 @@ export default {
       <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image from picsum">
       <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
       <p><mention m-id="1" m-type="user">Christina Applegate</mention></p>
+      <p>See this code snippet from <code>example.js</code> :</p>
+      <pre><code>function factorial(n) {
+    if (n &lt; 0) return undefined; // Factorial is not defined for negative numbers
+    if (n === 0) return 1;        // Base case: 0! is 1
+    return n * factorial(n - 1); // Recursive case
+}
+
+// Example usage:
+console.log(factorial(5)); // Output: 120</code></pre>
       <blockquote>Test quote.</blockquote>
       <p>All these <strong>cool tags</strong> are working now.</p>
       <p>
@@ -191,6 +200,8 @@ export default {
         {
           options: {
             lowlight,
+            enableTabIndentation: true,
+            tabSize: 2,
           },
         },
       ],

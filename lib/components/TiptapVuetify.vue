@@ -381,7 +381,8 @@ export default defineComponent({
 
   pre code {
     padding: 8px !important;
-    margin: 0 5px !important;
+    margin: 0 !important;
+    display: block;
   }
 
   code:before,
