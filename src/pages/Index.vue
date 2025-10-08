@@ -271,6 +271,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
               {
                 char: "@",
                 button: {
+                  title: "Nutzer:in erwähnen",
                   tooltip: "Nutzer:in erwähnen",
                 },
                 items: ({ query }) => {
@@ -286,8 +287,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
               {
                 char: "#",
                 button: {
-                  icon: "mdi-pound",
-                  tooltip: "Aufgaben erwähnen",
+                  title: "Aufgaben erwähnen",
                 },
                 menu: {
                   getProps: () => {

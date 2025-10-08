@@ -9,6 +9,14 @@
         :dark="$props[PROPS.DARK]"
         :disabled="$props[PROPS.DISABLED]"
       />
+      <action-menu
+        v-else-if="isMenu(action)"
+        :key="'action-menu-' + i"
+        :options="action.render.options"
+        :editor="$props[PROPS.EDITOR]"
+        :dark="$props[PROPS.DARK]"
+        :disabled="$props[PROPS.DISABLED]"
+      />
     </template>
   </div>
 </template>
@@ -20,8 +28,11 @@ import { type Editor } from "@tiptap/vue-2";
 
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
-import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
+import { isBtn } from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import ExtensionActionRenderBtnComponent from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn.vue";
+
+import { isMenu } from "@/extensions/actions/renders/menu/ExtensionActionRenderMenu";
+import ExtensionActionRenderMenuComponent from "@/extensions/actions/renders/menu/ExtensionActionRenderMenu.vue";
 
 export const PROPS = {
   EDITOR: "editor" as const,
@@ -33,6 +44,7 @@ export const PROPS = {
 export default defineComponent({
   components: {
     "action-btn": ExtensionActionRenderBtnComponent,
+    "action-menu": ExtensionActionRenderMenuComponent,
   },
   props: {
     [PROPS.EDITOR]: {
@@ -58,9 +70,8 @@ export default defineComponent({
     },
   },
   methods: {
-    isBtn(action: ExtensionActionInterface): boolean {
-      return action.render instanceof ExtensionActionRenderBtn;
-    },
+    isBtn,
+    isMenu,
   },
 });
 </script>

@@ -1,4 +1,5 @@
-import _Vue from "vue";
+import type _Vue from "vue";
+import UniqueId from "vue-unique-id";
 
 import type Vuetify from "vuetify";
 
@@ -18,6 +19,8 @@ const TiptapVuetifyPlugin = new (class Plugin
   }
 
   install(VueFuncConstructor: typeof _Vue, options?: OptionsInterface) {
+    VueFuncConstructor.use(UniqueId);
+
     if (!options?.vuetify) {
       ConsoleLogger.error(
         'Please, specify in options the Vuetify Object ("vuetify" property)',

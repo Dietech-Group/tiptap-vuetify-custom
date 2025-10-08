@@ -4,7 +4,7 @@ import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionI
 
 import { VuetifyIconsGroups } from "@/configs/theme";
 import AbstractExtension from "@/extensions/AbstractExtension";
-import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
+import { ExtensionActionRenderIconBtn } from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import TextIcon from "@/extensions/nativeExtensions/icons/TextIcon";
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 import I18nText from "@/i18n/I18nText";
@@ -17,7 +17,7 @@ export default class HorizontalRule extends AbstractExtension {
   get availableActions(): ExtensionActionInterface[] {
     return [
       {
-        render: new ExtensionActionRenderBtn({
+        render: new ExtensionActionRenderIconBtn({
           tooltip: new I18nText(
             "extensions.HorizontalRule.buttons.horizontalRule.tooltip",
           ),

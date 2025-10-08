@@ -95,6 +95,8 @@ export default defineConfig(({ mode }) => {
           "prosemirror-model",
           "prosemirror-state",
           "prosemirror-transform",
+
+          "vue-unique-id",
         ],
         //Add this so the UMD build will recognize the global variables
         //of externalized dependencies
@@ -143,6 +145,8 @@ export default defineConfig(({ mode }) => {
             "prosemirror-model": "ProseMirrorModel",
             "prosemirror-state": "ProseMirrorState",
             "prosemirror-transform": "ProseMirrorTransform",
+
+            "vue-unique-id": "VueUniqueId",
           },
           exports: "named",
           plugins: [

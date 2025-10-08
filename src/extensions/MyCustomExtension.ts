@@ -3,7 +3,7 @@ import type { Editor } from "@tiptap/vue-2";
 
 import { VuetifyIconsGroups } from "@/configs/theme";
 import AbstractExtension from "@/extensions/AbstractExtension";
-import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
+import { ExtensionActionRenderIconBtn } from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 
 // A class must inherit from an abstract class
@@ -16,7 +16,7 @@ export default class MyCustomExtension extends AbstractExtension {
     // For example, you can make this extension add a several buttons (array items)
     return [
       {
-        render: new ExtensionActionRenderBtn({
+        render: new ExtensionActionRenderIconBtn({
           tooltip: (context, options) =>
             options.isActive(context) ? "Make read-only" : "Disable read-only",
           // Button's icons for different icons groups. Usually for your extensions you only need one kind of icon,

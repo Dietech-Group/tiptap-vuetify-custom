@@ -1,27 +1,20 @@
 <template>
-  <v-btn
-    v-bind="$attrs"
-    :id="$id('action-btn')"
+  <v-list-item
+    :id="$id('action-list-item')"
+    dense
+    :class="{ 'v-list-item--active': options.isActive(editor) }"
     :disabled="disabled"
-    :class="{
-      'tiptap-vuetify-editor__action-render-btn': true,
-      'v-btn--active': options.isActive(editor),
-    }"
-    class="rounded"
     :dark="dark"
-    small
-    :icon="isIconBtnOptions(options)"
-    :text="isTextBtnOptions(options)"
-    v-on="{ ...on }"
     @click="options.onClick({ editor: editor })"
   >
     <action-btn-content :options="options" />
+
     <action-tooltip
       :editor="editor"
       :options="options"
-      :activator="$idRef('action-btn')"
+      :activator="$idRef('action-list-item')"
     />
-  </v-btn>
+  </v-list-item>
 </template>
 
 <script lang="ts">
@@ -29,23 +22,18 @@ import { defineComponent, PropType } from "vue";
 
 import { Editor } from "@tiptap/vue-2";
 
-import { VBtn } from "vuetify/lib";
+import ExtensionActionRenderTooltip from "../ExtensionActionRenderTooltip.vue";
+import ExtensionActionRenderBtnContent from "../btn/ExtensionActionRenderBtnContent.vue";
 
 import {
   type ExtensionActionRenderIconBtnOptionsInterface,
   type ExtensionActionRenderTextBtnOptionsInterface,
-  isIconBtnOptions,
-  isTextBtnOptions,
-} from "./ExtensionActionRenderBtnOptionsInterface";
-
-import ExtensionActionRenderTooltip from "../ExtensionActionRenderTooltip.vue";
-import ExtensionActionRenderBtnContent from "./ExtensionActionRenderBtnContent.vue";
+} from "../btn/ExtensionActionRenderBtnOptionsInterface";
 
 export default defineComponent({
   components: {
     "action-tooltip": ExtensionActionRenderTooltip,
     "action-btn-content": ExtensionActionRenderBtnContent,
-    VBtn,
   },
   props: {
     disabled: {
@@ -67,20 +55,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    on: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  methods: {
-    isIconBtnOptions,
-    isTextBtnOptions,
   },
 });
 </script>
-
-<style lang="scss">
-.tiptap-vuetify-editor__action-render-btn {
-  margin: 2px 6px;
-}
-</style>

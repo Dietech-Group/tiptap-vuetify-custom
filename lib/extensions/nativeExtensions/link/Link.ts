@@ -7,7 +7,7 @@ import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionI
 
 import { VuetifyIconsGroups } from "@/configs/theme";
 import AbstractExtension from "@/extensions/AbstractExtension";
-import ExtensionActionRenderBtn from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
+import { ExtensionActionRenderIconBtn } from "@/extensions/actions/renders/btn/ExtensionActionRenderBtn";
 import VuetifyIcon from "@/extensions/nativeExtensions/icons/VuetifyIcon";
 import LinkWindow from "@/extensions/nativeExtensions/link/LinkWindow.vue";
 import I18nText from "@/i18n/I18nText";
@@ -22,7 +22,7 @@ export default class Link extends AbstractExtension {
 
     return [
       {
-        render: new ExtensionActionRenderBtn({
+        render: new ExtensionActionRenderIconBtn({
           tooltip: (editor: Editor, options: any) =>
             new I18nText(
               options.isActive(editor)
