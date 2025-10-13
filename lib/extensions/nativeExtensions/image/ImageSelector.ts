@@ -26,16 +26,21 @@ export default class ImageSelector {
     this.filterErrorFunc = filterErrorFunc;
   }
 
+  private editorInstanceElement(): HTMLElement | null {
+    const uid = (this.editor.options as any)?.editorInstanceUId;
+    return document.querySelector(`[data-editor-instance-uid="${uid}"]`);
+  }
+
   open() {
     void new Promise<FileList | null>((resolve, reject) => {
       let changeTriggered = false;
       const input = document.createElement("input");
       input.setAttribute("type", "file");
-      input.setAttribute("id", "tiptap-vuetify-custom-image__input-file");
+      input.classList.add("tiptap-vuetify-custom-image__input-file");
       input.setAttribute("accept", "image/*");
       input.setAttribute("multiple", "");
       input.style.display = "none";
-      document.querySelector("body")!.appendChild(input);
+      this.editorInstanceElement()!.appendChild(input);
 
       input.addEventListener(
         "change",
@@ -43,8 +48,7 @@ export default class ImageSelector {
           changeTriggered = true;
           resolve(input.files);
           // remove dom
-          const el = document.getElementById(input.id);
-          if (el) document.body.removeChild(el);
+          if (input) input.parentNode?.removeChild(input);
         },
         { once: true },
       );
@@ -55,11 +59,10 @@ export default class ImageSelector {
         () => {
           setTimeout(() => {
             if (!changeTriggered) {
-              const el = document.getElementById(input.id);
-              if (el) {
+              if (input) {
                 reject(new CancelFileInputError());
                 // remove dom
-                document.body.removeChild(el);
+                input.parentNode?.removeChild(input);
               }
             }
           }, 300);

@@ -1,5 +1,5 @@
 <template>
-  <v-menu offset-y>
+  <v-menu offset-y :content-class="editorInstanceUId">
     <template #activator="{ on: onMenu, attrs }">
       <action-btn
         :options="{
@@ -74,6 +74,9 @@ export default defineComponent({
       return this.options.actions.some((action) =>
         action.render.options.isActive(this.editor),
       );
+    },
+    editorInstanceUId(): string | undefined {
+      return (this.editor.options as any)?.editorInstanceUId;
     },
   },
   methods: {

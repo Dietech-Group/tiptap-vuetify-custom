@@ -1,5 +1,10 @@
 <template>
-  <v-dialog :value="value" max-width="500px" width="100%">
+  <v-dialog
+    :value="value"
+    max-width="500px"
+    width="100%"
+    :content-class="editorInstanceUId"
+  >
     <v-card>
       <v-card-title>
         <span class="headline">
@@ -118,6 +123,9 @@ export default defineComponent({
         this[PROPS.HREF] === this.form.href ||
         (!this[PROPS.HREF] && !this.form.href)
       );
+    },
+    editorInstanceUId(): string | undefined {
+      return (this.editor.options as any)?.editorInstanceUId;
     },
   },
   methods: {

@@ -1,5 +1,10 @@
 <template>
-  <v-tooltip top :disabled="!tooltipText" :activator="activator">
+  <v-tooltip
+    top
+    :disabled="!tooltipText"
+    :activator="activator"
+    :content-class="editorInstanceUId"
+  >
     <span>{{ tooltipText }}</span>
   </v-tooltip>
 </template>
@@ -38,6 +43,9 @@ export default defineComponent({
       }
 
       return source;
+    },
+    editorInstanceUId(): string | undefined {
+      return (this.editor.options as any)?.editorInstanceUId;
     },
   },
 });

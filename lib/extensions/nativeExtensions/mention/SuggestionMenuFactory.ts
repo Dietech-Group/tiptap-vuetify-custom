@@ -107,6 +107,9 @@ export function createSuggestionMenu(
           this.margin * 2
         );
       },
+      editorInstanceUId(): string | undefined {
+        return (this.editor.options as any)?.editorInstanceUId;
+      },
     },
     methods: {
       onKeyDown(props: SuggestionKeyDownProps): boolean {
@@ -132,7 +135,7 @@ export function createSuggestionMenu(
             minWidth: this.width,
             maxWidth: this.width,
             transition: "slide-y-transition",
-            contentClass: "suggestion-menu",
+            contentClass: `suggestion-menu ${this.editorInstanceUId}`,
           },
         },
         [

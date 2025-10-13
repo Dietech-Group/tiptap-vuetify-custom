@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="editor"
+    :data-editor-instance-uid="editorInstanceUId"
     :class="{
       'tiptap-vuetify-editor--disabled': $props[PROPS.DISABLED],
     }"
@@ -143,6 +144,9 @@ export default defineComponent({
     };
   },
   computed: {
+    editorInstanceUId() {
+      return this.$id("tiptap-vuetify-editor");
+    },
     PROPS() {
       return PROPS;
     },
@@ -278,6 +282,8 @@ export default defineComponent({
       onUpdate: this.onUpdate.bind(this),
       onBlur: this.onBlur.bind(this),
       onFocus: this.onFocus.bind(this),
+      // @ts-expect-error: editorInstanceUId is a custom option
+      editorInstanceUId: this.editorInstanceUId,
     });
 
     this.$emit(EVENTS.INIT, {
