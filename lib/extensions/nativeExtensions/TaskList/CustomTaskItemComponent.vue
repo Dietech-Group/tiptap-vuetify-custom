@@ -8,6 +8,7 @@
       class="mr-1"
       hide-details
       :input-value="node.attrs.checked"
+      :readonly="!editor.isEditable"
       @change="onChange"
     />
     <node-view-content class="task-item-content" />
