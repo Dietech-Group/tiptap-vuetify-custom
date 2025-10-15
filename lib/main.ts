@@ -1,8 +1,9 @@
 import TiptapVuetifyPlugin from "./TiptapVuetifyPlugin";
-import TiptapVuetify from "./components/TiptapVuetify.vue";
+import TiptapVuetifyEditor from "./components/TiptapVuetifyEditor.vue";
+import TiptapVuetifyContent from "./components/TiptapVuetifyContent.vue";
 
 export * from "./extensions/nativeExtensions/index";
-export { TiptapVuetify };
+export { TiptapVuetifyEditor, TiptapVuetifyContent };
 export { TiptapVuetifyPlugin };
 (function autoInstall() {
   let globalScope: any = null;
@@ -18,6 +19,7 @@ export { TiptapVuetifyPlugin };
       vuetify: globalScope.vuetify,
       ...globalScope.tiptapVuetifyPluginOptions,
     });
-    globalScope.Vue.component("tiptap-vuetify", TiptapVuetify);
+    globalScope.Vue.component("tiptap-vuetify-editor", TiptapVuetifyEditor);
+    globalScope.Vue.component("tiptap-vuetify-content", TiptapVuetifyContent);
   }
 })();

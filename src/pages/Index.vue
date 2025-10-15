@@ -23,9 +23,9 @@
     :editor-properties="editorProperties"
     output-format="json"
    -->
-    <tiptap-vuetify
+    <tiptap-vuetify-editor
       v-model="content"
-      :extensions="extensions"
+      :extensions="extensionsEditor"
       placeholder="Write something …"
       :max-height="mentionAttachActive ? '300px' : undefined"
       :style="mentionAttachActive ? 'width: 75%;' : undefined"
@@ -37,7 +37,11 @@
     <h1>Preview</h1>
     <hr />
 
-    <div class="tiptap-vuetify-editor__content" v-html="content" />
+    <tiptap-vuetify-content
+      :value="content"
+      :extensions="extensionsContent"
+      disabled
+    />
   </div>
 </template>
 
@@ -51,7 +55,8 @@ import CustomMentionExtension from "src/extensions/CustomMentionExtension";
 
 import MyCustomExtension from "../extensions/MyCustomExtension";
 import {
-  TiptapVuetify,
+  TiptapVuetifyEditor,
+  TiptapVuetifyContent,
   Heading,
   Bold,
   Italic,
@@ -85,10 +90,12 @@ lowlight.register("dockerfile", dockerfile);
 
 export default {
   components: {
-    TiptapVuetify,
+    TiptapVuetifyEditor,
+    TiptapVuetifyContent,
   },
   data: () => ({
-    extensions: null,
+    extensionsEditor: null,
+    extensionsContent: null,
     mentionAttachActive: false,
     content: `
       <h1>Yay Headlines!</h1>
@@ -172,184 +179,191 @@ console.log(factorial(5)); // Output: 120</code></pre>
     pageSize: 5,
   }),
   created() {
-    this.extensions = [
-      MyCustomExtension,
-      [
-        Table,
-        {
-          options: {
-            resizable: true,
-          },
-        },
-      ],
-      TableCell,
-      TableHeader,
-      TableRow,
-      TaskList,
-      [
-        TaskItem,
-        {
-          options: {
-            nested: true,
-          },
-        },
-      ],
-      Code,
-      [
-        CodeBlock,
-        {
-          options: {
-            lowlight,
-            enableTabIndentation: true,
-            tabSize: 2,
-          },
-        },
-      ],
-      HorizontalRule,
-      Paragraph,
-      History,
-      HardBreak, // позволяет переносить через Shift + Ctrl + Enter
-      Underline,
-      Strike,
-      Italic,
-      ListItem, // если нужно использовать список (BulletList, OrderedList)
-      BulletList,
-      OrderedList,
-      [
-        Image,
-        {
-          options: {
-            inline: true,
-            maxFileSize: 1048576,
-            filterErrorFunc: (type, file) => {
-              console.log(type, file);
+    this.extensionsEditor = this.extensionsDef();
+    this.extensionsContent = this.extensionsDef();
+  },
+  methods: {
+    extensionsDef() {
+      return [
+        MyCustomExtension,
+        [
+          Table,
+          {
+            options: {
+              resizable: true,
             },
           },
-        },
-      ],
-      [
-        Heading,
-        {
-          // Опции которые попадают в расширение tiptap
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      // но опции не обязательно указывать если нужно чтобы renderIn: 'toolbar', это по умолчанию.
-      [
-        Bold,
-        {
-          renderIn: "toolbar",
-        },
-      ],
-      [
-        Blockquote,
-        {
-          renderIn: "bubbleMenu",
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      [
-        Link,
-        {
-          renderIn: "bubbleMenu",
-        },
-      ],
-      [
-        Mention,
-        {
-          options: {
-            nativeExtension: CustomMentionExtension,
-            HTMLAttributes: {
-              class: "mention",
+        ],
+        TableCell,
+        TableHeader,
+        TableRow,
+        TaskList,
+        [
+          TaskItem,
+          {
+            options: {
+              nested: true,
             },
-            deleteTriggerWithBackspace: true,
-            suggestions: [
-              {
-                char: "@",
-                button: {
-                  title: "Nutzer:in erwähnen",
-                  tooltip: "Nutzer:in erwähnen",
-                },
-                items: ({ query }) => {
-                  query = query || "";
-                  return this.mentionItemsAll
-                    .filter((item) =>
-                      item.toLowerCase().startsWith(query.toLowerCase()),
-                    )
-                    .slice(0, 10);
-                },
-                allowSpaces: true,
+          },
+        ],
+        Code,
+        [
+          CodeBlock,
+          {
+            options: {
+              lowlight,
+              enableTabIndentation: true,
+              tabSize: 2,
+            },
+          },
+        ],
+        HorizontalRule,
+        Paragraph,
+        History,
+        HardBreak, // позволяет переносить через Shift + Ctrl + Enter
+        Underline,
+        Strike,
+        Italic,
+        ListItem, // если нужно использовать список (BulletList, OrderedList)
+        BulletList,
+        OrderedList,
+        [
+          Image,
+          {
+            options: {
+              inline: true,
+              maxFileSize: 1048576,
+              filterErrorFunc: (type, file) => {
+                console.log(type, file);
               },
-              {
-                char: "#",
-                button: {
-                  title: "Aufgaben erwähnen",
-                },
-                menu: {
-                  getProps: () => {
-                    return {
-                      ...(this.mentionAttachActive
-                        ? {
-                            attach: () =>
-                              this.$refs.externalMentionMenuAttachElement,
-                          }
-                        : {}),
-                    };
+            },
+          },
+        ],
+        [
+          Heading,
+          {
+            // Опции которые попадают в расширение tiptap
+            options: {
+              levels: [1, 2, 3],
+            },
+          },
+        ],
+        // но опции не обязательно указывать если нужно чтобы renderIn: 'toolbar', это по умолчанию.
+        [
+          Bold,
+          {
+            renderIn: "toolbar",
+          },
+        ],
+        [
+          Blockquote,
+          {
+            renderIn: "bubbleMenu",
+            options: {
+              levels: [1, 2, 3],
+            },
+          },
+        ],
+        [
+          Link,
+          {
+            renderIn: "bubbleMenu",
+          },
+        ],
+        [
+          Mention,
+          {
+            options: {
+              nativeExtension: CustomMentionExtension,
+              HTMLAttributes: {
+                class: "mention",
+              },
+              deleteTriggerWithBackspace: true,
+              suggestions: [
+                {
+                  char: "@",
+                  button: {
+                    title: "Nutzer:in erwähnen",
+                    tooltip: "Nutzer:in erwähnen",
                   },
-                  content: {
-                    component: CustomSuggestionList,
-                    listeners: {
-                      load: ({ query, page, callback }) => {
-                        const filteredItems = this.mentionItemsAll
-                          .map((item, index) => {
-                            return {
-                              id: index.toString(),
-                              label: item,
-                              type: "user",
-                            };
-                          })
-                          .filter((item) =>
-                            item.label
-                              .toLowerCase()
-                              .startsWith(query.toLowerCase()),
-                          );
+                  items: ({ query }) => {
+                    query = query || "";
+                    return this.mentionItemsAll
+                      .filter((item) =>
+                        item.toLowerCase().startsWith(query.toLowerCase()),
+                      )
+                      .slice(0, 10);
+                  },
+                  allowSpaces: true,
+                },
+                {
+                  char: "#",
+                  button: {
+                    title: "Aufgaben erwähnen",
+                  },
+                  menu: {
+                    getProps: () => {
+                      return {
+                        ...(this.mentionAttachActive
+                          ? {
+                              attach: () =>
+                                this.$refs.externalMentionMenuAttachElement,
+                            }
+                          : {}),
+                      };
+                    },
+                    content: {
+                      component: CustomSuggestionList,
+                      listeners: {
+                        load: ({ query, page, callback }) => {
+                          const filteredItems = this.mentionItemsAll
+                            .map((item, index) => {
+                              return {
+                                id: index.toString(),
+                                label: item,
+                                type: "user",
+                              };
+                            })
+                            .filter((item) =>
+                              item.label
+                                .toLowerCase()
+                                .startsWith(query.toLowerCase()),
+                            );
 
-                        if (
-                          page < Math.ceil(filteredItems.length / this.pageSize)
-                        ) {
-                          const loadedItems = filteredItems.slice(
-                            page * this.pageSize,
-                            Math.min(
-                              (page + 1) * this.pageSize,
-                              filteredItems.length,
-                            ),
-                          );
+                          if (
+                            page <
+                            Math.ceil(filteredItems.length / this.pageSize)
+                          ) {
+                            const loadedItems = filteredItems.slice(
+                              page * this.pageSize,
+                              Math.min(
+                                (page + 1) * this.pageSize,
+                                filteredItems.length,
+                              ),
+                            );
 
-                          callback(
-                            loadedItems,
-                            page,
-                            page >=
-                              Math.ceil(filteredItems.length / this.pageSize) -
-                                1,
-                          );
-                        }
+                            callback(
+                              loadedItems,
+                              page,
+                              page >=
+                                Math.ceil(
+                                  filteredItems.length / this.pageSize,
+                                ) -
+                                  1,
+                            );
+                          }
+                        },
                       },
                     },
                   },
+                  allowSpaces: true,
                 },
-                allowSpaces: true,
-              },
-            ],
+              ],
+            },
           },
-        },
-      ],
-    ];
-  },
-  methods: {
+        ],
+      ];
+    },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onkeydown(event) {
       // console.log('event', event.key)

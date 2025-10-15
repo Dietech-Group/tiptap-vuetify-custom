@@ -1,0 +1,232 @@
+/* The element does not necessarily contain .tiptap-vuetify-editor, it can be used to display the result of the editor in a non-editor */
+.tiptap-vuetify-editor__content {
+  transition: all 2s;
+  overflow: auto !important;
+  padding: 5px;
+
+  :first-child:not(.ProseMirror) {
+    margin-top: 0 !important;
+  }
+
+  a {
+    pointer-events: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  blockquote,
+  pre,
+  ul,
+  ol,
+  .tableWrapper {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-top: 20px !important;
+  }
+
+  blockquote {
+    border-left: 0.25em solid #dfe2e5;
+    color: #6a737d;
+    padding-left: 1em;
+  }
+
+  code {
+    padding: 0 4px !important;
+    margin: 0 5px !important;
+  }
+
+  span.mention {
+    padding: 2px 8px;
+    background-color: #eee;
+    border-radius: 1em;
+  }
+
+  pre code {
+    padding: 8px !important;
+    margin: 0 !important;
+    display: block;
+  }
+
+  code:before,
+  code:after {
+    content: none !important;
+    letter-spacing: initial !important;
+  }
+
+  p {
+    /* Without this, the empty <p> in the preview will not take up space (so that it looks like an empty line) as it does in the editor */
+    min-height: 1rem;
+
+    // placeholder
+    &.tiptap-vuetify-editor__paragraph--is-empty {
+      &:first-child::before {
+        content: attr(data-placeholder);
+        float: left;
+        color: #aaa;
+        pointer-events: none;
+        height: 0;
+        font-style: italic;
+      }
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid gray;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: relative;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(200, 200, 255, 0.4);
+      pointer-events: none;
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      z-index: 20;
+      background-color: #adf;
+      pointer-events: none;
+    }
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .resize-cursor {
+    cursor: col-resize;
+  }
+
+  &--disabled {
+    // same color for disabled text as default light vuetify theme: vuetify/src/styles/settings/_light.scss#L30
+    color: rgba(0, 0, 0, 0.38);
+    &:after {
+      // same as background as for filled v-text-input: vuetify/src/styles/settings/_light.scss#L87
+      background-color: rgba(0, 0, 0, 0.06);
+      position: absolute;
+      content: "";
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin-left: 10px;
+    margin-right: 1rem;
+
+    li p {
+      margin-top: 0.25em !important;
+      margin-bottom: 0.25em !important;
+    }
+  }
+
+  ul[data-type="taskList"] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      &:not(:last-child) {
+        margin-bottom: 8px !important;
+      }
+
+      > div.v-input--checkbox {
+        padding-top: 0;
+        margin-top: 0;
+      }
+
+      &:not([data-node-view-wrapper]) {
+        &::before {
+          margin-right: 0.5em;
+          font-size: 24px;
+          line-height: 24px;
+
+          display: inline-block;
+          font: normal normal normal 24px/1 "Material Design Icons";
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: "\F0131";
+        }
+
+        &[data-checked="true"]::before {
+          content: "\F0132";
+          color: #1976d2 !important;
+          caret-color: #1976d2 !important;
+        }
+      }
+
+      > label {
+        user-select: none;
+
+        > input {
+          display: none;
+        }
+      }
+
+      > div:not(.v-input--checkbox) {
+        min-width: 1rem;
+        overflow-wrap: break-word;
+
+        > p {
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+  }
+}

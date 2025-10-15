@@ -6,9 +6,11 @@
   >
     <v-checkbox
       class="mr-1"
+      :class="{ 'task-item--readonly': !editor.isEditable }"
       hide-details
       :input-value="node.attrs.checked"
       :readonly="!editor.isEditable"
+      :ripple="editor.isEditable"
       @change="onChange"
     />
     <node-view-content class="task-item-content" />
@@ -35,5 +37,8 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss"></style>
+<style lang="scss">
+.task-item--readonly {
+  pointer-events: none;
+}
+</style>
