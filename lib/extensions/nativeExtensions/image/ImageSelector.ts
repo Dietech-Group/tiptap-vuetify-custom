@@ -83,15 +83,17 @@ export default class ImageSelector {
             ),
           )
             .then((sources) => {
-              this.editor
-                .chain()
-                .focus()
-                .insertContent(
-                  sources.map((source) => {
-                    return { type: "customImage", attrs: source };
-                  }),
-                )
-                .run();
+              if (Array.isArray(sources) && sources.length > 0) {
+                this.editor
+                  .chain()
+                  .focus()
+                  .insertContent(
+                    sources.map((source) => {
+                      return { type: "customImage", attrs: source };
+                    }),
+                  )
+                  .run();
+              }
             })
             .catch((error) => console.error(error));
         }
