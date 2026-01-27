@@ -1,5 +1,5 @@
 import { CustomImageNode, type ExtendedImageOptions } from "./CustomImageNode";
-import ImageSelector from "./ImageSelector";
+import { type FileSource, FileSelector } from "@/extensions/helper/FileSelector";
 
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
@@ -16,7 +16,7 @@ export default class Image extends AbstractExtension {
 
   get availableActions(): ExtensionActionInterface[] {
     const nativeExtensionName = "customImage";
-    const options: ExtendedImageOptions = this.options;
+    const options: ExtendedImageOptions = this.nativeExtensionInstance.options;
 
     return [
       {
@@ -32,11 +32,22 @@ export default class Image extends AbstractExtension {
           },
           nativeExtensionName,
           async onClick({ editor }) {
-            const selector = new ImageSelector(
+            const selector = new FileSelector(
               editor,
               options.fileTypes,
               options.maxFileSize,
               options.filterErrorFunc,
+              (files: FileSource[]) => {
+                editor
+                  .chain()
+                  .focus()
+                  .insertContent(
+                    files.map((source) => {
+                      return { type: "customImage", attrs: source };
+                    }),
+                  )
+                  .run();
+              },
             );
             selector.open();
           },

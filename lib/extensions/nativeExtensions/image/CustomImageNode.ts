@@ -10,16 +10,16 @@ import {
   type FileTypesType,
   type MaxFileSizeType,
   type FilterErrorFuncType,
-  filterImages,
-} from "./ImageHelper";
+  filterFiles,
+} from "@/extensions/helper/FileSelector";
 import ImageView from "./ImageView.vue";
 import { VueConstructor } from "vue";
 
 export interface ExtendedImageOptions extends Partial<ImageOptions> {
   /**
    * Controls which image file types are allowed to drop.
-   * @param fileTypes - Defaults to: ['png', 'jpeg', 'gif']
-   * @example ['png']
+   * @param fileTypes - Defaults to: ["image/png", "image/jpeg", "image/gif"]
+   * @example ["image/png", "image/jpeg"]
    */
   fileTypes: FileTypesType;
 
@@ -43,7 +43,7 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
   addOptions() {
     return {
       ...this.parent?.(),
-      fileTypes: ["png", "jpeg", "gif"],
+      fileTypes: ["image/png", "image/jpeg", "image/gif"],
       maxFileSize: undefined,
       filterErrorFunc: undefined,
     };
@@ -72,7 +72,7 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
 
       event.preventDefault();
 
-      const images = filterImages(
+      const images = filterFiles(
         Array.from(files),
         options.fileTypes,
         options.maxFileSize,
