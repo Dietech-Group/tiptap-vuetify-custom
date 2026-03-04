@@ -3,6 +3,7 @@
     v-bind="$attrs"
     :id="$id('action-btn')"
     :disabled="disabled"
+    :loading="options.loading"
     :class="{
       'tiptap-vuetify-editor__action-render-btn': true,
       'v-btn--active': options.isActive(editor),

@@ -14,6 +14,7 @@ export interface ExtensionActionRenderBtnOptionsInterface {
   onClick: ({ editor }: { editor: Editor }) => any;
   onClickCommand?: string;
   onClickOptions?: Record<string, any>;
+  loading?: boolean;
   isActive: (editor: Editor) => boolean;
   isActiveOptions?: Record<string, any>;
   nativeExtensionName?: string;
@@ -28,7 +29,7 @@ export interface ExtensionActionRenderIconBtnOptionsInterface
 
 export interface ExtensionActionRenderTextBtnOptionsInterface
   extends ExtensionActionRenderBtnOptionsInterface {
-  text: string;
+  text: string | I18nText;
 }
 
 export function isIconBtnOptions(

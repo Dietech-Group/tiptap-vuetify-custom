@@ -5,6 +5,7 @@
         :options="{
           tooltip: options.tooltip,
           icons: options.icons,
+          loading: options.loading,
           isActive: () => isActive,
           onClick: () => {},
         }"

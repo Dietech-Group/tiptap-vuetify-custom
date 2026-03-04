@@ -15,5 +15,6 @@ export interface ExtensionActionRenderMenuOptionsInterface {
   icons: Partial<{
     [key in keyof typeof VuetifyIconsGroups]: IconInterface;
   }>;
+  loading?: boolean;
   actions: ExtensionActionInterface[];
 }
