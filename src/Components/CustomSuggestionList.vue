@@ -59,6 +59,7 @@ export default defineComponent({
       this.selectedIndex = 0;
       this.pagesLoaded = 0;
       this.itemsInternal.splice(0);
+      this.allPagesLoaded = false;
       this.loadItemsIfNeeded(false);
     },
     selectedIndex() {
@@ -74,11 +75,11 @@ export default defineComponent({
         this.$emit("load", {
           query: this.query,
           page: this.pagesLoaded + (more ? 1 : 0),
-          callback: (item: any[], page: number, allPagesLoaded: boolean) => {
+          callback: (items: any[], page: number, allPagesLoaded: boolean) => {
             // console.log(`Page ${page} loaded. More pages: ${!allPagesLoaded}`);
             this.pagesLoaded = page;
             this.allPagesLoaded = allPagesLoaded;
-            this.itemsInternal.push(...item);
+            this.itemsInternal.push(...items);
           },
         });
       }
