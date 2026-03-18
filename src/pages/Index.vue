@@ -101,8 +101,8 @@ export default {
     mentionAttachActive: false,
     content: `
       <h1>Yay Headlines!</h1>
-      <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image from picsum">
-      <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
+      <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test1/1000">
+      <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
       <p>See this mention: <mention m-id="1" m-type="user">Christina Applegate</mention></p>
       <p>See this file:<file f-id="12">Market Analysis Report</file></p>
       <p>See this code snippet from <code>example.js</code> :</p>
@@ -270,6 +270,11 @@ console.log(factorial(5)); // Output: 120</code></pre>
               maxFileSize: 1048576,
               filterErrorFunc: (type, file) => {
                 console.log(type, file);
+              },
+              customAttributes: { "data-high-res-src": null },
+              onClick: (attrs) => {
+                if (attrs["data-high-res-src"])
+                  window.open(attrs["data-high-res-src"], "_blank");
               },
             },
           },

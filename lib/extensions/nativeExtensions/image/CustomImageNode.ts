@@ -36,6 +36,18 @@ export interface ExtendedImageOptions extends Partial<ImageOptions> {
    * @example (type, file) =\> \{ console.log(type, file) \}
    */
   filterErrorFunc: FilterErrorFuncType;
+
+  /**
+   * Allows to add custom attributes to the image node (tag).
+   * @example {"data-high-res-src": null}
+   */
+  customAttributes?: Record<string, any>;
+
+  /**
+   * A function which is called when a image node is clicked.
+   * @param attrs Attributes of the clicked image node
+   */
+  onClick?: (attrs: Record<string, any>) => void;
 }
 
 export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
@@ -51,7 +63,7 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
   addAttributes() {
     return {
       ...this.parent?.(),
-      "data-high-res-src": null,
+      ...(this.options.customAttributes ?? {}),
     };
   },
   addNodeView() {
