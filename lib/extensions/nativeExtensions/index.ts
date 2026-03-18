@@ -22,3 +22,4 @@ export { default as TableCell } from "@/extensions/nativeExtensions/table/TableC
 export { default as TableHeader } from "@/extensions/nativeExtensions/table/TableHeader";
 export { default as TableRow } from "@/extensions/nativeExtensions/table/TableRow";
 export { default as Mention } from "@/extensions/nativeExtensions/mention/Mention";
+export { default as FileExtension } from "@/extensions/nativeExtensions/file/FileExtension";

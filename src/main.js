@@ -5,7 +5,6 @@ import Router from "vue-router";
 import Vuetify, {
   // Components used in demo
   VApp,
-  VAlert,
   VMain,
   VContainer,
   // Components used in this package
@@ -25,7 +24,13 @@ import Vuetify, {
   VList,
   VListItemGroup,
   VListItem,
+  VChip,
+  VAvatar,
+  VProgressCircular,
+  VOverlay,
+  VAlert,
 } from "vuetify/lib";
+import { Intersect } from "vuetify/lib/directives";
 import "vuetify/dist/vuetify.min.css";
 
 // icons
@@ -47,7 +52,6 @@ Vue.use(Vuetify, {
   components: {
     // Components used in demo
     VApp,
-    VAlert,
     VMain,
     VContainer,
     VCheckbox,
@@ -67,8 +71,13 @@ Vue.use(Vuetify, {
     VList,
     VListItemGroup,
     VListItem,
+    VChip,
+    VAvatar,
+    VProgressCircular,
+    VOverlay,
+    VAlert,
   },
-  directives: {},
+  directives: { Intersect },
 });
 Vue.use(TiptapVuetifyPlugin, {
   vuetify,

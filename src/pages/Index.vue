@@ -52,6 +52,7 @@ import { common, createLowlight } from "lowlight";
 // import FileSelector from '../Components/FileSelector'
 import CustomSuggestionList from "../Components/CustomSuggestionList.vue";
 import CustomMentionExtension from "src/extensions/CustomMentionExtension";
+import CustomFileSelectDialog from "../Components/CustomFileSelectDialog.vue";
 
 import MyCustomExtension from "../extensions/MyCustomExtension";
 import {
@@ -81,6 +82,7 @@ import {
   TableHeader,
   TableRow,
   Mention,
+  FileExtension,
 } from "src/lib";
 
 import "highlight.js/styles/stackoverflow-light.css";
@@ -101,7 +103,8 @@ export default {
       <h1>Yay Headlines!</h1>
       <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image from picsum">
       <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
-      <p><mention m-id="1" m-type="user">Christina Applegate</mention></p>
+      <p>See this mention: <mention m-id="1" m-type="user">Christina Applegate</mention></p>
+      <p>See this file:<file f-id="12">Market Analysis Report</file></p>
       <p>See this code snippet from <code>example.js</code> :</p>
       <pre><code>function factorial(n) {
     if (n &lt; 0) return undefined; // Factorial is not defined for negative numbers
@@ -177,7 +180,38 @@ console.log(factorial(5)); // Output: 120</code></pre>
       "Justine Bateman",
       "Lisa Bonet",
     ],
+    fileItemsAll: [
+      { id: 1, label: "Project Milestones" },
+      { id: 2, label: "Annual Report 2025" },
+      { id: 3, label: "Budget Breakdown" },
+      { id: 4, label: "Meeting Notes - Q1" },
+      { id: 5, label: "Design Mockups" },
+      { id: 6, label: "User Manual" },
+      { id: 7, label: "Sprint Backlog" },
+      { id: 8, label: "Research Findings" },
+      { id: 9, label: "Code Documentation" },
+      { id: 10, label: "Product Roadmap" },
+      { id: 11, label: "Feature Requests" },
+      { id: 12, label: "Market Analysis Report" },
+      { id: 13, label: "Sales Presentation" },
+      { id: 14, label: "Project Timeline" },
+      { id: 15, label: "Web App Architecture" },
+      { id: 16, label: "Client Feedback" },
+      { id: 17, label: "Security Protocols" },
+      { id: 18, label: "DevOps Guidelines" },
+      { id: 19, label: "Changelog" },
+      { id: 20, label: "Testing Reports" },
+      { id: 21, label: "Team Roster" },
+      { id: 22, label: "Event Agenda" },
+      { id: 23, label: "Product Specifications" },
+      { id: 24, label: "Webinar Recording" },
+      { id: 25, label: "Onboarding Guide" },
+      { id: 26, label: "Database Schema" },
+      { id: 27, label: "Client Proposals" },
+      { id: 28, label: "Error Logs Analysis" },
+    ],
     pageSize: 5,
+    cancelUploads: false,
   }),
   created() {
     this.extensionsEditor = this.extensionsDef();
@@ -360,6 +394,83 @@ console.log(factorial(5)); // Output: 120</code></pre>
                   allowSpaces: true,
                 },
               ],
+            },
+          },
+        ],
+        [
+          FileExtension,
+          {
+            options: {
+              maxFileSize: 5048576,
+              filterErrorFunc: (type, file) => {
+                console.log(type, file);
+              },
+              upload: (file, onSuccess, onError, onProgress) => {
+                this.cancelUploads = false;
+
+                // Simulate an upload process
+                const totalSize = file.size;
+                let loadedSize = 0;
+
+                // onError(`${file.name}: Bad request`);
+                // return;
+
+                const uploadInterval = setInterval(() => {
+                  if (this.cancelUploads) {
+                    clearInterval(uploadInterval);
+                    return;
+                  }
+
+                  // Simulate uploading in chunks (50 KB chunks)
+                  const chunkSize = Math.min(50 * 1024, totalSize - loadedSize);
+                  loadedSize += chunkSize;
+
+                  // Calculate progress percentage
+                  const progress = Math.min(loadedSize / totalSize, 1);
+                  onProgress(progress);
+
+                  if (loadedSize >= totalSize) {
+                    clearInterval(uploadInterval);
+                    onSuccess({
+                      id: Math.floor(Math.random() * 1000),
+                      title: file.name,
+                    });
+                  }
+                }, 200); // Update progress every 200 ms
+              },
+              cancelRemainingUploads: () => {
+                this.cancelUploads = true;
+              },
+              select: {
+                component: CustomFileSelectDialog,
+                load: ({ query, page, callback }) => {
+                  const filteredItems = this.fileItemsAll.filter((item) =>
+                    item.label.toLowerCase().startsWith(query.toLowerCase()),
+                  );
+
+                  if (page < Math.ceil(filteredItems.length / this.pageSize)) {
+                    const loadedItems = filteredItems.slice(
+                      page * this.pageSize,
+                      Math.min(
+                        (page + 1) * this.pageSize,
+                        filteredItems.length,
+                      ),
+                    );
+
+                    setTimeout(() => {
+                      callback(
+                        loadedItems,
+                        page,
+                        page >=
+                          Math.ceil(filteredItems.length / this.pageSize) - 1,
+                      );
+                    }, 500);
+                  }
+                },
+              },
+              onClick: (id) => {
+                alert(`File node clicked with id: ${id}`);
+              },
             },
           },
         ],

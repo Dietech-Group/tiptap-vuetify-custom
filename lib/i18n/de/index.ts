@@ -166,5 +166,21 @@ export default {
         tooltip: "Erwähnung",
       },
     },
+    File: {
+      menu: {
+        tooltip: "Datei",
+      },
+      buttons: {
+        upload: "Datei Hochladen",
+        addExisting: "Bestehende Datei hinzufügen",
+      },
+      overlay: {
+        errorTitle: "Während des Uploads sind Fehleraufgetreten:",
+        buttons: {
+          cancel: "Abbrechen",
+          close: "Schließen",
+        },
+      },
+    },
   },
 };
