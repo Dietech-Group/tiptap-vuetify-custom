@@ -9,24 +9,24 @@ export type FilterErrorFuncType =
  * @param files - Array of files.
  * @param fileTypes - Array of file types (ex. ['pdf', 'txt', 'png']).
  * @param maxFileSize - The max filesize in bytes.
- * @param filterErrorFunc - An callback which is called for every file which is filtered out.
+ * @param onFilterErrorFunc - An callback which is called for every file which is filtered out.
  * @returns The filtered files.
  */
 export function filterFiles(
   files: File[],
   fileTypes: FileTypesType,
   maxFileSize: MaxFileSizeType,
-  filterErrorFunc: FilterErrorFuncType,
+  onFilterErrorFunc?: FilterErrorFuncType,
 ): File[] {
   if ((maxFileSize && maxFileSize > 0) || (fileTypes && fileTypes.length > 0)) {
     return files.filter((file) => {
       const hasCorrectType = fileTypes ? fileTypes.includes(file.type) : true;
       const hasCorrectSize = maxFileSize ? file.size <= maxFileSize : true;
-      if (filterErrorFunc) {
+      if (onFilterErrorFunc) {
         if (!hasCorrectType) {
-          filterErrorFunc("type", file);
+          onFilterErrorFunc("type", file);
         } else if (!hasCorrectSize) {
-          filterErrorFunc("size", file);
+          onFilterErrorFunc("size", file);
         }
       }
 
@@ -43,33 +43,37 @@ export interface FileSource {
   src: null | string;
   alt: null | string;
 }
-export type OnFilesSelectFuncType = (files: FileSource[]) => void;
+export type OnFilesSelectFuncType = (files: FileSource[] | File[]) => void;
 
 /**
  * Creates a html file selector dialog.
  * @param editor - TipTap editor instance.
  * @param fileTypes - Array of file types (ex. ['pdf', 'txt', 'png']).
  * @param maxFileSize - The max filesize in bytes.
- * @param filterErrorFunc - An callback which is called for every file which is filtered out.
+ * @param readFiles - Boolean which controls if the selected files should be read as data urls. If false, only the file name and type are returned.
+ * @param onFilterErrorFunc - An callback which is called for every file which is filtered out.
  * @param onFilesSelectFunc - Callback which is called with the selected files.
  */
 export class FileSelector {
   private readonly editor: any;
   private readonly fileTypes: FileTypesType;
   private readonly maxFileSize: MaxFileSizeType;
-  private readonly filterErrorFunc: FilterErrorFuncType;
+  private readonly readFiles: boolean;
+  private readonly onFilterErrorFunc: FilterErrorFuncType;
   private readonly onFilesSelectFunc: OnFilesSelectFuncType;
   constructor(
     editor: any,
     fileTypes: FileTypesType,
     maxFileSize: MaxFileSizeType,
-    filterErrorFunc: FilterErrorFuncType,
+    readFiles: boolean,
+    onFilterErrorFunc: FilterErrorFuncType,
     onFilesSelectFunc: OnFilesSelectFuncType,
   ) {
     this.editor = editor;
     this.fileTypes = fileTypes;
     this.maxFileSize = maxFileSize;
-    this.filterErrorFunc = filterErrorFunc;
+    this.readFiles = readFiles;
+    this.onFilterErrorFunc = onFilterErrorFunc;
     this.onFilesSelectFunc = onFilesSelectFunc;
   }
 
@@ -123,20 +127,26 @@ export class FileSelector {
     })
       .then((files) => {
         if (files) {
-          this.readFiles(
-            filterFiles(
-              Array.from(files),
-              this.fileTypes,
-              this.maxFileSize,
-              this.filterErrorFunc,
-            ),
-          )
-            .then((sources) => {
-              if (Array.isArray(sources) && sources.length > 0) {
-                this.onFilesSelectFunc(sources);
-              }
-            })
-            .catch((error) => console.error(error));
+          const filteredFiles = filterFiles(
+            Array.from(files),
+            this.fileTypes,
+            this.maxFileSize,
+            this.onFilterErrorFunc,
+          );
+
+          if (Array.isArray(filteredFiles) && filteredFiles.length > 0) {
+            if (this.readFiles) {
+              this.readFilesAsDataURL(filteredFiles)
+                .then((sources) => {
+                  if (Array.isArray(sources) && sources.length > 0) {
+                    this.onFilesSelectFunc(sources);
+                  }
+                })
+                .catch((error) => console.error(error));
+            } else {
+              this.onFilesSelectFunc(filteredFiles);
+            }
+          }
         }
       })
       .catch((error) => {
@@ -145,7 +155,7 @@ export class FileSelector {
       });
   }
 
-  async readFiles(files: File[]): Promise<FileSource[]> {
+  async readFilesAsDataURL(files: File[]): Promise<FileSource[]> {
     const filePromises = files.map(async (file) => {
       // Return a promise per file
       return await new Promise<FileSource>((resolve, reject) => {

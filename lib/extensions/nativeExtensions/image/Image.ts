@@ -1,5 +1,8 @@
 import { CustomImageNode, type ExtendedImageOptions } from "./CustomImageNode";
-import { type FileSource, FileSelector } from "@/extensions/helper/FileSelector";
+import {
+  type FileSource,
+  FileSelector,
+} from "@/extensions/helper/FileSelector";
 
 import type ExtensionActionInterface from "@/extensions/actions/ExtensionActionInterface";
 
@@ -36,13 +39,14 @@ export default class Image extends AbstractExtension {
               editor,
               options.fileTypes,
               options.maxFileSize,
+              true,
               options.filterErrorFunc,
-              (files: FileSource[]) => {
+              (files: FileSource[] | File[]) => {
                 editor
                   .chain()
                   .focus()
                   .insertContent(
-                    files.map((source) => {
+                    (files as FileSource[]).map((source) => {
                       return { type: "customImage", attrs: source };
                     }),
                   )
