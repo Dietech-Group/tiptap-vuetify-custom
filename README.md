@@ -16,6 +16,8 @@ Example:
 
 To release a new version with a `*.tgz` archive you need to trigger the github release workflow ([release.yml](.github/workflows/release.yml)) with creating a new tag (starting with `v`) and push it.
 
+⚠️ **Important:** Don't forget to update version in `package.json`. 
+
 ```
 git tag <tagname>
 git push origin <tagname>

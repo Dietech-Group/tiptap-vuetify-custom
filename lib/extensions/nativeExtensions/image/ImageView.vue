@@ -5,10 +5,13 @@
       :alt="node.attrs.alt"
       :title="node.attrs.title"
       :class="{
-        'tiptap-vuetify__custom-image-with-high-res-src':
-          !!node.attrs['data-high-res-src'],
+        'tiptap-vuetify__custom-image--clickable': !!extension.options.onClick,
       }"
-      @click="onClick"
+      v-on="
+        extension.options.onClick
+          ? { click: () => extension.options.onClick(node.attrs) }
+          : {}
+      "
     />
   </node-view-wrapper>
 </template>
@@ -17,7 +20,7 @@
 import { defineComponent, PropType } from "vue";
 
 import { Node } from "@tiptap/pm/model";
-import { NodeViewWrapper } from "@tiptap/vue-2";
+import { Extension, NodeViewWrapper } from "@tiptap/vue-2";
 
 export default defineComponent({
   components: {
@@ -28,22 +31,16 @@ export default defineComponent({
       type: Object as PropType<Node>,
       required: true,
     },
-  },
-  computed: {
-    highResSrc(): string | null {
-      return this.node.attrs["data-high-res-src"];
-    },
-  },
-  methods: {
-    onClick() {
-      if (this.highResSrc) window.open(this.highResSrc, "_blank");
+    extension: {
+      type: Object as PropType<Extension>,
+      required: true,
     },
   },
 });
 </script>
 
 <style>
-.tiptap-vuetify__custom-image-with-high-res-src:hover {
+.tiptap-vuetify__custom-image--clickable:hover {
   cursor: pointer;
 }
 </style>
