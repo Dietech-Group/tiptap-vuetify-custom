@@ -114,12 +114,13 @@ export default defineComponent({
   },
   methods: {
     initEditor() {
-      const nativeExtensionsInstances: any = [];
+      let nativeExtensionsInstances: any = [];
       const extensionsInstances: AbstractExtensionInterface[] = [];
       // default extension options
       const paramsDefault = {
         renderIn: ExtensionActionRenderInEnum.toolbar,
         options: {},
+        priority: undefined,
       };
 
       (this[PROPS.EXTENSIONS] as any[]).forEach((extensionDefinition) => {
@@ -159,11 +160,32 @@ export default defineComponent({
 
         // Collection of native extensions
         if (extension.nativeExtensionInstance) {
-          nativeExtensionsInstances.push(extension.nativeExtensionInstance);
+          nativeExtensionsInstances.push({
+            instance: extension.nativeExtensionInstance,
+            priority: paramsFinal.priority,
+          });
         }
         // Collection of extensions
         extensionsInstances.push(extension);
       });
+
+      // Sort native extensions by priority: higher numbers first, undefined at the end
+      nativeExtensionsInstances.sort(
+        (a: { priority: any }, b: { priority: any }) => {
+          const aPri = a.priority;
+          const bPri = b.priority;
+          if (aPri === undefined && bPri === undefined) return 0;
+          if (aPri === undefined) return 1;
+          if (bPri === undefined) return -1;
+          return bPri - aPri;
+        },
+      );
+
+      // Extract instances
+      nativeExtensionsInstances = nativeExtensionsInstances.map(
+        (item: { instance: any }) => item.instance,
+      );
+
       this.availableExtensions = [
         Document,
         Paragraph,

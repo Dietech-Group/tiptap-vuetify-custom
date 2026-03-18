@@ -400,6 +400,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
         [
           FileExtension,
           {
+            priority: 1,
             options: {
               maxFileSize: 5048576,
               filterErrorFunc: (type, file) => {
