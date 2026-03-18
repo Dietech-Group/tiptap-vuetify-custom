@@ -67,20 +67,19 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
       coordinates: any,
     ) {
       if (!(files && files.length > 0)) {
-        return;
+        return false;
       }
-
-      event.preventDefault();
 
       const images = filterFiles(
         Array.from(files),
         options.fileTypes,
         options.maxFileSize,
-        options.filterErrorFunc,
       );
       if (images.length === 0) {
-        return;
+        return false;
       }
+
+      event.preventDefault();
 
       const { schema } = view.state;
 
@@ -100,6 +99,8 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
         };
         reader.readAsDataURL(image);
       });
+
+      return true;
     };
 
     const plugin = new Plugin({
