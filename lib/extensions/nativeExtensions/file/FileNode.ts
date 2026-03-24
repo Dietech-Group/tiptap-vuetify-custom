@@ -16,6 +16,9 @@ import { VueConstructor } from "vue";
 import FileLoadingOverlay from "./FileLoadingOverlay.vue";
 import { createAndMountComponent } from "@/extensions/helper/ComponentFactory";
 
+export type Action = "upload" | "addExisting";
+type Actions = Action | Action[];
+
 export interface ExtendedFileOptions {
   /**
    * Controls which file types are allowed to drop.
@@ -37,6 +40,11 @@ export interface ExtendedFileOptions {
    * @example (type, file) => { console.log(type, file) }
    */
   filterErrorFunc: FilterErrorFuncType;
+
+  /**
+   * Any combination of 'upload' | 'addExisting' which disabled these actions.
+   */
+  disableActions?: Actions;
 
   /**
    * A function to upload a file to a server.

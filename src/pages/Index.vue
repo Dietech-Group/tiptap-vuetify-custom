@@ -411,6 +411,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
               filterErrorFunc: (type, file) => {
                 console.log(type, file);
               },
+              // disableActions: "addExisting",
               upload: (file, onSuccess, onError, onProgress) => {
                 this.cancelUploads = false;
 
