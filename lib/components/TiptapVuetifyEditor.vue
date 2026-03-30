@@ -61,6 +61,7 @@ import Toolbar from "@/components/Toolbar.vue";
 import { EVENTS, PROPS, EDITOR_TYPES_ENUM } from "@/const";
 
 import EditorMixin from "@/mixins/EditorMixin";
+import "./TiptapVuetifyEditor.scss";
 import "./TiptapVuetifyContent.scss";
 
 export default defineComponent({
@@ -148,18 +149,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.tiptap-vuetify-editor {
-  position: relative;
-
-  .ProseMirror {
-    outline: none !important;
-    margin: 20px !important;
-  }
-
-  &--disabled {
-    cursor: not-allowed;
-  }
-}
-</style>
