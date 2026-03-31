@@ -103,8 +103,8 @@ export default {
       <h1>Yay Headlines!</h1>
       <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test1/1000">
       <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
-      <p>See this mention: <mention m-id="1" m-type="user">Christina Applegate</mention></p>
-      <p>See this file:<file f-id="12">Market Analysis Report</file></p>
+      <p><mention m-id="1" m-type="user">Christina Applegate</mention> is a mention</p>
+      <p><file f-id="12">Market Analysis Report</file> is a file</p>
       <p>See this code snippet from <code>example.js</code> :</p>
       <pre><code>function factorial(n) {
     if (n &lt; 0) return undefined; // Factorial is not defined for negative numbers

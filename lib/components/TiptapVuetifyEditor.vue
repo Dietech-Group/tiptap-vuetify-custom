@@ -55,6 +55,7 @@ import { VCard } from "vuetify/lib";
 
 import { type Editor as CoreEditorType } from "@tiptap/core";
 import { Editor, EditorContent } from "@tiptap/vue-2";
+import { TextSelection } from "@tiptap/pm/state";
 
 import Bubble from "@/components/Bubble.vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -63,6 +64,12 @@ import { EVENTS, PROPS, EDITOR_TYPES_ENUM } from "@/const";
 import EditorMixin from "@/mixins/EditorMixin";
 import "./TiptapVuetifyEditor.scss";
 import "./TiptapVuetifyContent.scss";
+
+function isFirefox() {
+  return (
+    typeof navigator !== "undefined" && /firefox/i.test(navigator.userAgent)
+  );
+}
 
 export default defineComponent({
   components: {
@@ -118,6 +125,42 @@ export default defineComponent({
             }
 
             this.$emit("keydown", event, view);
+          },
+          handleDOMEvents: {
+            ...(isFirefox()
+              ? {
+                  // workaround for firefox cursor placement bug when clicking in front of an element with contenteditable="false"
+                  // see: https://github.com/ueberdosis/tiptap/issues/3320
+                  mousedown: (view, event: MouseEvent) => {
+                    const target = event.target as HTMLElement | null;
+                    if (!target?.classList.contains("ProseMirror"))
+                      return false;
+
+                    const left = target.getBoundingClientRect().left + 1;
+                    const top = event.clientY;
+
+                    const posResult = view.posAtCoords({ left, top });
+                    if (!posResult || typeof posResult.pos !== "number")
+                      return false;
+
+                    // Resolve the position and find the start of the nearest block (e.g., paragraph)
+                    const $pos = view.state.doc.resolve(posResult.pos);
+                    if ($pos.parent.type.name !== "paragraph") return false;
+                    const blockStart = $pos.start($pos.depth);
+                    if (view.state.selection.from === blockStart) return false;
+
+                    const tr = view.state.tr.setSelection(
+                      TextSelection.create(view.state.doc, blockStart),
+                    );
+                    tr.setMeta("addToHistory", false);
+                    view.dispatch(tr);
+                    view.focus();
+
+                    event.preventDefault();
+                    return true;
+                  },
+                }
+              : {}),
           },
         },
         content: this[PROPS.VALUE],
