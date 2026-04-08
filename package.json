@@ -1,6 +1,6 @@
 {
   "name": "tiptap-vuetify-custom",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "type": "module",
   "main": "./dist/bundle.umd.cjs",
   "module": "./dist/bundle.js",
