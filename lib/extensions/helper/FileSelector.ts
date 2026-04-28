@@ -7,20 +7,30 @@ export type FilterErrorFuncType =
 /**
  * Filter files by type and size
  * @param files - Array of files.
- * @param fileTypes - Array of file types (ex. ['pdf', 'txt', 'png']).
+ * @param includedFileTypes - Array of allowed file types (ex. ['pdf', 'txt', 'png'] or undefined).
+ * @param excludedFileTypes - Array of not allowed file types (ex. ['pdf', 'txt', 'png'] or undefined).
  * @param maxFileSize - The max filesize in bytes.
  * @param onFilterErrorFunc - An callback which is called for every file which is filtered out.
  * @returns The filtered files.
  */
 export function filterFiles(
   files: File[],
-  fileTypes: FileTypesType,
+  includedFileTypes: FileTypesType,
+  excludedFileTypes: FileTypesType,
   maxFileSize: MaxFileSizeType,
   onFilterErrorFunc?: FilterErrorFuncType,
 ): File[] {
-  if ((maxFileSize && maxFileSize > 0) || (fileTypes && fileTypes.length > 0)) {
+  if (
+    (maxFileSize && maxFileSize > 0) ||
+    (includedFileTypes && includedFileTypes.length > 0) ||
+    (excludedFileTypes && excludedFileTypes.length > 0)
+  ) {
     return files.filter((file) => {
-      const hasCorrectType = fileTypes ? fileTypes.includes(file.type) : true;
+      let hasCorrectType = true;
+      if (includedFileTypes)
+        hasCorrectType &&= includedFileTypes.includes(file.type);
+      if (excludedFileTypes)
+        hasCorrectType &&= !excludedFileTypes.includes(file.type);
       const hasCorrectSize = maxFileSize ? file.size <= maxFileSize : true;
       if (onFilterErrorFunc) {
         if (!hasCorrectType) {
@@ -130,6 +140,7 @@ export class FileSelector {
           const filteredFiles = filterFiles(
             Array.from(files),
             this.fileTypes,
+            undefined,
             this.maxFileSize,
             this.onFilterErrorFunc,
           );

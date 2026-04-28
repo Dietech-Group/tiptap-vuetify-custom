@@ -7,8 +7,11 @@
   >
     <v-card :loading="loading">
       <v-card-text class="pt-4">
-        <v-text-field label="Suche" @input="onQueryInput"></v-text-field>
-        <v-list style="overflow-y: auto; height: 100%">
+        <v-text-field
+          label="Bilder durchsuchen"
+          @input="onQueryInput"
+        ></v-text-field>
+        <v-list two-line style="overflow-y: auto; height: 100%">
           <v-list-item
             v-for="(item, index) in itemsInternal"
             :key="item.id"
@@ -16,7 +19,13 @@
             :data-index="index"
             @click="onItemClicked(item)"
           >
-            {{ item.label }}
+            <v-list-item-avatar tile size="56" class="mr-3">
+              <v-img :src="item.src" :alt="item.alt || item.label" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.label }}</v-list-item-title>
+              <v-list-item-subtitle>ID: {{ item.id }}</v-list-item-subtitle>
+            </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-card-text>
@@ -27,7 +36,18 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { VDialog, VCard, VCardText, VList, VListItem } from "vuetify/lib";
+import {
+  VDialog,
+  VCard,
+  VCardText,
+  VList,
+  VListItem,
+  VListItemAvatar,
+  VListItemContent,
+  VListItemTitle,
+  VListItemSubtitle,
+  VImg,
+} from "vuetify/lib";
 import { Intersect } from "vuetify/lib/directives";
 
 import I18nMixin from "@/mixins/I18nMixin";
@@ -39,6 +59,11 @@ export default defineComponent({
     VCardText,
     VList,
     VListItem,
+    VListItemAvatar,
+    VListItemContent,
+    VListItemTitle,
+    VListItemSubtitle,
+    VImg,
   },
   directives: { Intersect },
   mixins: [I18nMixin],
@@ -70,7 +95,7 @@ export default defineComponent({
   },
   computed: {
     dialogContentClasses() {
-      const classes = ["file-select-dialog--fullheight"];
+      const classes = ["image-select-dialog--fullheight"];
 
       if (this.customClass) classes.push(this.customClass);
 
@@ -102,7 +127,6 @@ export default defineComponent({
         callback: (item: any[], page: number, allPagesLoaded: boolean) => {
           this.loading = false;
           if (!this.cancelAndReload) {
-            // console.log(`Page ${page} loaded. More pages: ${!allPagesLoaded}`);
             this.pagesLoaded = page;
             this.allPagesLoaded = allPagesLoaded;
             this.itemsInternal.push(...item);
@@ -142,9 +166,10 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.file-select-dialog--fullheight {
+.image-select-dialog--fullheight {
   height: 90%;
   overflow-y: unset;
+  width: 100%;
 
   & > .v-card {
     display: flex;
@@ -157,8 +182,5 @@ export default defineComponent({
       padding-bottom: 96px;
     }
   }
-}
-.file-select-dialog--fullheight {
-  width: 100%;
 }
 </style>

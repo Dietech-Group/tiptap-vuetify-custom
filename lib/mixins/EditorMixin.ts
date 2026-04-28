@@ -169,7 +169,7 @@ export default defineComponent({
         extensionsInstances.push(extension);
       });
 
-      // Sort native extensions by priority: higher numbers first, undefined at the end
+      // Sort native extensions by priority: higher numbers first, undefined at the beginning
       nativeExtensionsInstances.sort(
         (a: { priority: any }, b: { priority: any }) => {
           const aPri = a.priority;

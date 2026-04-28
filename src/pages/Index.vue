@@ -53,6 +53,7 @@ import { common, createLowlight } from "lowlight";
 import CustomSuggestionList from "../Components/CustomSuggestionList.vue";
 import CustomMentionExtension from "src/extensions/CustomMentionExtension";
 import CustomFileSelectDialog from "../Components/CustomFileSelectDialog.vue";
+import CustomImageSelectDialog from "../Components/CustomImageSelectDialog.vue";
 
 import MyCustomExtension from "../extensions/MyCustomExtension";
 import {
@@ -101,8 +102,8 @@ export default {
     mentionAttachActive: false,
     content: `
       <h1>Yay Headlines!</h1>
-      <img src="https://picsum.photos/seed/test1/100" alt="test image" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test1/1000">
-      <img src="https://picsum.photos/seed/test2/100" alt="test image with highres version" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
+      <img src="https://picsum.photos/seed/test1/100" f-id="1" alt="test image" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test1/1000">
+      <img src="https://picsum.photos/seed/test2/100" f-id="2" alt="test image with highres version" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test2/1000">
       <p><mention m-id="1" m-type="user">Christina Applegate</mention> is a mention</p>
       <p><file f-id="12">Market Analysis Report</file> is a file</p>
       <p>See this code snippet from <code>example.js</code> :</p>
@@ -210,8 +211,39 @@ console.log(factorial(5)); // Output: 120</code></pre>
       { id: 27, label: "Client Proposals" },
       { id: 28, label: "Error Logs Analysis" },
     ],
+    imageItemsAll: [
+      { id: 0, label: "Laptop on a wooden desk" },
+      { id: 1, label: "Person typing on a laptop outdoors" },
+      { id: 4, label: "Hand writing in a notebook" },
+      { id: 10, label: "Forest overlooking ocean and mountains" },
+      { id: 13, label: "Pebble beach with calm sea" },
+      { id: 17, label: "Tree-lined park path in spring" },
+      { id: 22, label: "Person walking across an empty road" },
+      { id: 26, label: "Flat lay of everyday accessories" },
+      { id: 28, label: "Lush green forest with rocky stream" },
+      { id: 33, label: "Wildflowers in a meadow at sunset" },
+      { id: 37, label: "Cliffside view of the ocean" },
+      { id: 41, label: "Water droplets on a wooden surface" },
+      { id: 44, label: "Foggy view of a beach from above" },
+      { id: 48, label: "MacBook on a wooden cafe table" },
+      { id: 51, label: "Calm ocean shore in black and white" },
+      { id: 56, label: "Colorful bokeh lights" },
+      { id: 58, label: "Stone lighthouse on a rocky coast" },
+      { id: 62, label: "Tuscan countryside at golden hour" },
+      { id: 65, label: "Woman in a sunlit field at sunset" },
+      { id: 71, label: "Empty swing by a lake at sunset" },
+      { id: 74, label: "San Francisco skyline from the bay" },
+      { id: 78, label: "Old wooden door of a weathered building" },
+      { id: 84, label: "Suspension bridge at night" },
+      { id: 89, label: "Blades of grass against the sun" },
+      { id: 92, label: "Seashells on a sandy beach" },
+      { id: 95, label: "Foggy park with bare trees" },
+      { id: 100, label: "Crowded beach on a hazy day" },
+      { id: 101, label: "Concrete bunker against a blue sky" },
+    ],
     pageSize: 5,
     cancelUploads: false,
+    cancelImageUploads: false,
   }),
   created() {
     this.extensionsEditor = this.extensionsDef();
@@ -267,11 +299,77 @@ console.log(factorial(5)); // Output: 120</code></pre>
           {
             options: {
               inline: true,
-              maxFileSize: 1048576,
+              maxFileSize: 5048576,
               filterErrorFunc: (type, file) => {
                 console.log(type, file);
               },
               customAttributes: { "data-high-res-src": null },
+              upload: (file, onSuccess, onError, onProgress) => {
+                this.cancelImageUploads = false;
+
+                const totalSize = file.size;
+                let loadedSize = 0;
+
+                const uploadInterval = setInterval(() => {
+                  if (this.cancelImageUploads) {
+                    clearInterval(uploadInterval);
+                    return;
+                  }
+
+                  const chunkSize = Math.min(50 * 1024, totalSize - loadedSize);
+                  loadedSize += chunkSize;
+
+                  onProgress(Math.min(loadedSize / totalSize, 1));
+
+                  if (loadedSize >= totalSize) {
+                    clearInterval(uploadInterval);
+                    const id = Math.floor(Math.random() * 10000);
+                    onSuccess({
+                      id,
+                      label: file.name,
+                      src: URL.createObjectURL(file),
+                      alt: file.name,
+                    });
+                  }
+                }, 200);
+              },
+              cancelRemainingUploads: () => {
+                this.cancelImageUploads = true;
+              },
+              select: {
+                component: CustomImageSelectDialog,
+                load: ({ query, page, callback }) => {
+                  const filteredItems = this.imageItemsAll.filter((item) =>
+                    item.label.toLowerCase().includes(query.toLowerCase()),
+                  );
+
+                  if (page < Math.ceil(filteredItems.length / this.pageSize)) {
+                    const loadedItems = filteredItems
+                      .slice(
+                        page * this.pageSize,
+                        Math.min(
+                          (page + 1) * this.pageSize,
+                          filteredItems.length,
+                        ),
+                      )
+                      .map((item) => ({
+                        id: item.id,
+                        label: item.label,
+                        src: `https://picsum.photos/id/${item.id}/100`,
+                        alt: item.label,
+                      }));
+
+                    setTimeout(() => {
+                      callback(
+                        loadedItems,
+                        page,
+                        page >=
+                          Math.ceil(filteredItems.length / this.pageSize) - 1,
+                      );
+                    }, 500);
+                  }
+                },
+              },
               onClick: (attrs) => {
                 if (attrs["data-high-res-src"])
                   window.open(attrs["data-high-res-src"], "_blank");
@@ -440,7 +538,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
                     clearInterval(uploadInterval);
                     onSuccess({
                       id: Math.floor(Math.random() * 1000),
-                      title: file.name,
+                      label: file.name,
                     });
                   }
                 }, 200); // Update progress every 200 ms
@@ -475,8 +573,8 @@ console.log(factorial(5)); // Output: 120</code></pre>
                   }
                 },
               },
-              onClick: (id) => {
-                alert(`File node clicked with id: ${id}`);
+              onClick: (attrs) => {
+                alert(`File node clicked with id: ${attrs.id}`);
               },
             },
           },

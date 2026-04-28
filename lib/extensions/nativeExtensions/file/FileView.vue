@@ -7,7 +7,7 @@
       text-color="white"
       v-on="
         extension.options.onClick
-          ? { click: () => extension.options.onClick(node.attrs.id) }
+          ? { click: () => extension.options.onClick(node.attrs) }
           : {}
       "
     >

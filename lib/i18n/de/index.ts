@@ -1,4 +1,13 @@
 export default {
+  generic: {
+    uploadOverlay: {
+      errorTitle: "Während des Uploads sind Fehleraufgetreten:",
+      buttons: {
+        cancel: "Abbrechen",
+        close: "Schließen",
+      },
+    },
+  },
   extensions: {
     Blockquote: {
       buttons: {
@@ -119,22 +128,11 @@ export default {
     Image: {
       buttons: {
         tooltip: "Bild",
+        upload: "Bild Hochladen",
+        addExisting: "Bestehendes Bild hinzufügen",
       },
-      window: {
-        title: "Bild hinzufügen",
-        form: {
-          sourceLink: "Bild URL",
-          altText: "Alternativtext",
-          addImage: "Bild hinzufügen",
-        },
-        imageUpload: {
-          instruction:
-            "Wählen Sie eine oder mehrere Dateien aus oder ziehen Sie diese hierher.",
-        },
-        buttons: {
-          close: "Schließen",
-          apply: "Übernehmen",
-        },
+      menu: {
+        tooltip: "Bild",
       },
     },
     Table: {
@@ -173,13 +171,6 @@ export default {
       buttons: {
         upload: "Datei Hochladen",
         addExisting: "Bestehende Datei hinzufügen",
-      },
-      overlay: {
-        errorTitle: "Während des Uploads sind Fehleraufgetreten:",
-        buttons: {
-          cancel: "Abbrechen",
-          close: "Schließen",
-        },
       },
     },
   },

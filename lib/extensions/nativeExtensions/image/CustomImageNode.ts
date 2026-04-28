@@ -5,38 +5,32 @@ import {
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import { EditorView } from "prosemirror-view";
+import { Editor } from "@tiptap/vue-2";
 
-import {
-  type FileTypesType,
-  type MaxFileSizeType,
-  type FilterErrorFuncType,
-  filterFiles,
-} from "@/extensions/helper/FileSelector";
+import { filterFiles } from "@/extensions/helper/FileSelector";
 import ImageView from "./ImageView.vue";
 import { VueConstructor } from "vue";
+import UploadOverlay from "@/extensions/helper/UploadOverlay.vue";
+import { createAndMountComponent } from "@/extensions/helper/ComponentFactory";
+import type { UploadSelectOptions } from "@/extensions/helper/UploadSelect";
 
-export interface ExtendedImageOptions extends Partial<ImageOptions> {
-  /**
-   * Controls which image file types are allowed to drop.
-   * @param fileTypes - Defaults to: ["image/png", "image/jpeg", "image/gif"]
-   * @example ["image/png", "image/jpeg"]
-   */
-  fileTypes: FileTypesType;
+export interface ImageUploadResult {
+  id: number;
+  label: string;
+  src: string;
+  alt?: string;
+}
 
-  /**
-   * Controls the allowed max image file size of dropped images.
-   * @param maxFileSize - Defaults to: null
-   * @example 1073741824
-   */
-  maxFileSize: MaxFileSizeType;
+export interface ImageSelectItem {
+  id: number;
+  label: string;
+  src: string;
+  alt?: string;
+}
 
-  /**
-   * Callback function which is called for every dropped file which is rejected because of file type or size.
-   * @param filterErrorFunc - Defaults to: null
-   * @example (type, file) =\> \{ console.log(type, file) \}
-   */
-  filterErrorFunc: FilterErrorFuncType;
-
+export interface ExtendedImageOptions
+  extends Partial<ImageOptions>,
+    UploadSelectOptions<ImageUploadResult, ImageSelectItem> {
   /**
    * Allows to add custom attributes to the image node (tag).
    * @example {"data-high-res-src": null}
@@ -44,7 +38,7 @@ export interface ExtendedImageOptions extends Partial<ImageOptions> {
   customAttributes?: Record<string, any>;
 
   /**
-   * A function which is called when a image node is clicked.
+   * A function which is called when an image node is clicked.
    * @param attrs Attributes of the clicked image node
    */
   onClick?: (attrs: Record<string, any>) => void;
@@ -55,7 +49,8 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
   addOptions() {
     return {
       ...this.parent?.(),
-      fileTypes: ["image/png", "image/jpeg", "image/gif"],
+      includedFileTypes: ["image/png", "image/jpeg", "image/gif"],
+      excludedFileTypes: undefined,
       maxFileSize: undefined,
       filterErrorFunc: undefined,
     };
@@ -63,6 +58,19 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
   addAttributes() {
     return {
       ...this.parent?.(),
+      id: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("f-id"),
+        renderHTML: (attributes) => {
+          if (!attributes.id) {
+            return {};
+          }
+
+          return {
+            "f-id": attributes.id,
+          };
+        },
+      },
       ...(this.options.customAttributes ?? {}),
     };
   },
@@ -71,6 +79,7 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
   },
   addProseMirrorPlugins() {
     const options = this.options;
+    const editor: Editor = this.editor as Editor;
 
     const handleImageEvent = function (
       view: EditorView,
@@ -78,38 +87,43 @@ export const CustomImageNode = ImageOriginal.extend<ExtendedImageOptions>({
       files: FileList | undefined,
       coordinates: any,
     ) {
-      if (!(files && files.length > 0)) {
+      if (!(files && files.length > 0) || !options.upload) {
         return false;
       }
 
       const images = filterFiles(
         Array.from(files),
-        options.fileTypes,
+        options.includedFileTypes,
+        options.excludedFileTypes,
         options.maxFileSize,
       );
       if (images.length === 0) {
         return false;
       }
 
-      event.preventDefault();
+      // If not all files are filtered, we want to trigger the callbacks of the file extensions
+      if (images.length === Array.from(files).length) {
+        event.preventDefault();
+      }
 
-      const { schema } = view.state;
-
-      images.forEach((image) => {
-        const reader = new FileReader();
-
-        reader.onload = (readerEvent) => {
-          if (readerEvent?.target?.result) {
-            const node = schema.nodes.customImage.create({
-              src: readerEvent.target.result,
+      createAndMountComponent(UploadOverlay, editor, {
+        propsData: {
+          files: images,
+          upload: options.upload,
+          cancel: options.cancelRemainingUploads ?? (() => {}),
+          insert: (result: ImageUploadResult) => {
+            const node = view.state.schema.nodes.customImage.create({
+              id: result.id,
+              src: result.src,
+              alt: result.alt ?? null,
             });
             const transaction = coordinates
               ? view.state.tr.insert(coordinates.pos, node)
               : view.state.tr.replaceSelectionWith(node);
             view.dispatch(transaction);
-          }
-        };
-        reader.readAsDataURL(image);
+          },
+        },
+        onClose: () => editor.commands.focus(),
       });
 
       return true;

@@ -5,93 +5,48 @@ import { EditorView } from "prosemirror-view";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 
-import {
-  type FileTypesType,
-  type MaxFileSizeType,
-  type FilterErrorFuncType,
-  filterFiles,
-} from "@/extensions/helper/FileSelector";
+import { filterFiles } from "@/extensions/helper/FileSelector";
 import FileView from "./FileView.vue";
 import { VueConstructor } from "vue";
-import FileLoadingOverlay from "./FileLoadingOverlay.vue";
+import UploadOverlay from "@/extensions/helper/UploadOverlay.vue";
 import { createAndMountComponent } from "@/extensions/helper/ComponentFactory";
+import type { UploadSelectOptions } from "@/extensions/helper/UploadSelect";
 
-export type Action = "upload" | "addExisting";
-type Actions = Action | Action[];
-
-export interface ExtendedFileOptions {
-  /**
-   * Controls which file types are allowed to drop.
-   * @param fileTypes - Defaults to: null
-   * @example ['application/pdf']
-   */
-  fileTypes: FileTypesType;
-
-  /**
-   * Controls the allowed max file size of dropped files.
-   * @param maxFileSize - Defaults to: null
-   * @example 1073741824
-   */
-  maxFileSize: MaxFileSizeType;
-
-  /**
-   * Callback function which is called for every dropped file which is rejected because of file type or size.
-   * @param filterErrorFunc - Defaults to: null
-   * @example (type, file) => { console.log(type, file) }
-   */
-  filterErrorFunc: FilterErrorFuncType;
-
-  /**
-   * Any combination of 'upload' | 'addExisting' which disabled these actions.
-   */
-  disableActions?: Actions;
-
-  /**
-   * A function to upload a file to a server.
-   * @param file - File object
-   * @param onSucess callback for a successful upload
-   * @param onError Error callback when the upload fails
-   * @param onProgress Progresds callback which is called with the upload progress in percent (0-100)
-   */
-  upload: (
-    file: File,
-    onSuccess: ({ id, title }: { id: number; title: string }) => void,
-    onError: (error: string) => void,
-    onProgress: (progress: number) => void,
-  ) => void;
-
-  /**
-   * A function to cancel all remaining uploads.
-   */
-  cancelRemainingUploads: () => void;
-
-  select: {
-    component: VueConstructor;
-    load: (
-      query: string,
-      page: number,
-      callback: (
-        items: { label: string; value: string }[],
-        page: number,
-        allPagesLoaded: boolean,
-      ) => void,
-    ) => void;
-  };
-
-  /**
-   * A function which is called when a file node is clicked.
-   * @param id Id of the clicked file node
-   */
-  onClick: (id: number) => void;
+export interface FileUploadResult {
+  id: number;
+  label: string;
 }
 
-export const FileNode = Node.create({
+export interface FileSelectItem {
+  id: number;
+  label: string;
+}
+
+export interface ExtendedFileOptions
+  extends UploadSelectOptions<FileUploadResult, FileSelectItem> {
+  /**
+   * A function which is called when a file node is clicked.
+   * @param attrs Attributes of the clicked image node
+   */
+  onClick?: (attrs: Record<string, any>) => void;
+}
+
+export const FileNode = Node.create<ExtendedFileOptions>({
   name: "fileNode",
   group: "inline",
   inline: true,
   selectable: false,
   atom: true,
 
+  addOptions() {
+    return {
+      ...this.parent?.(),
+      includedFileTypes: undefined,
+      excludedFileTypes: ["image/png", "image/jpeg", "image/gif"],
+      maxFileSize: undefined,
+      filterErrorFunc: undefined,
+    };
+  },
   addAttributes() {
     return {
       id: {
@@ -148,13 +103,14 @@ export const FileNode = Node.create({
 
       coordinates: any,
     ) {
-      if (!(files && files.length > 0)) {
+      if (!(files && files.length > 0) || !options.upload) {
         return false;
       }
 
       const filteredFiles = filterFiles(
         Array.from(files),
-        options.fileTypes,
+        options.includedFileTypes,
+        options.excludedFileTypes,
         options.maxFileSize,
       );
       if (filteredFiles.length === 0) {
@@ -163,13 +119,16 @@ export const FileNode = Node.create({
 
       event.preventDefault();
 
-      createAndMountComponent(FileLoadingOverlay, editor, {
+      createAndMountComponent(UploadOverlay, editor, {
         propsData: {
           files: filteredFiles,
           upload: options.upload,
           cancel: options.cancelRemainingUploads,
-          insert: (fileNode: any) => {
-            const node = view.state.schema.nodes.fileNode.create(fileNode);
+          insert: (item: { id: number; label: string }) => {
+            const node = view.state.schema.nodes.fileNode.create({
+              id: item.id,
+              label: item.label,
+            });
             const transaction = coordinates
               ? view.state.tr.insert(coordinates.pos, node)
               : view.state.tr.replaceSelectionWith(node);
