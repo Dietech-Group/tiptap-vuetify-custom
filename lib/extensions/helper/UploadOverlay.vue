@@ -1,12 +1,12 @@
 <template>
-  <v-overlay class="file-loading-overlay">
+  <v-overlay class="loading-overlay">
     <v-progress-circular v-if="remaining" :value="progress" size="64">
       <template v-if="remaining !== undefined">{{ remaining }}</template>
     </v-progress-circular>
 
     <v-alert v-if="errors && errors.length" type="error" class="mt-2">
       <h3 class="mb-2">
-        {{ $i18n.getMsg("extensions.File.overlay.errorTitle") }}
+        {{ $i18n.getMsg("generic.uploadOverlay.errorTitle") }}
       </h3>
       <p v-for="(error, index) in errors" :key="index" class="mb-1">
         {{ error }}
@@ -15,10 +15,10 @@
 
     <v-btn color="secondary" class="mt-2" @click="close">
       <template v-if="remaining">{{
-        $i18n.getMsg("extensions.File.overlay.buttons.cancel")
+        $i18n.getMsg("generic.uploadOverlay.buttons.cancel")
       }}</template>
       <template v-else>{{
-        $i18n.getMsg("extensions.File.overlay.buttons.close")
+        $i18n.getMsg("generic.uploadOverlay.buttons.close")
       }}</template>
     </v-btn>
   </v-overlay>
@@ -78,20 +78,17 @@ export default defineComponent({
       (this.files as File[]).map((file: File, index: number) => {
         this.upload(
           file,
-          // onSuccess callback
-          ({ id, title }: { id: number; title: string }) => {
-            this.insert({ id, label: title });
+          (result: any) => {
+            this.insert(result);
 
             this.remaining = Math.max((this.remaining || 0) - 1, 0);
             if (this.remaining === 0) this.close();
           },
-          // onError callback
           (error: string) => {
             this.errors = [...(this.errors || []), error];
             this.remaining = Math.max((this.remaining || 0) - 1, 0);
             if (this.remaining === 0 && !this.errors?.length) this.close();
           },
-          // onProgress callback
           (progress: number) => {
             uploadedSizes[index] = progress * file.size;
             const uploadedTotal = uploadedSizes.reduce(
@@ -114,7 +111,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.file-loading-overlay > :deep(.v-overlay__content) {
+.loading-overlay > :deep(.v-overlay__content) {
   display: flex;
   flex-direction: column;
   align-items: center;

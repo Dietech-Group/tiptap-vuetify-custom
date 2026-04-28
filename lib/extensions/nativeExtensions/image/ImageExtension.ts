@@ -1,4 +1,9 @@
-import { FileNode, type ExtendedFileOptions } from "./FileNode";
+import {
+  CustomImageNode,
+  type ExtendedImageOptions,
+  type ImageUploadResult,
+  type ImageSelectItem,
+} from "./CustomImageNode";
 import {
   type FileSource,
   FileSelector,
@@ -21,20 +26,21 @@ import {
   isAddExistingEnabled,
 } from "@/extensions/helper/UploadSelect";
 
-export default class FileExtension extends AbstractExtension {
-  constructor(options: ExtendedFileOptions) {
-    super(options, FileNode);
+export default class ImageExtension extends AbstractExtension {
+  constructor(options: ExtendedImageOptions) {
+    super(options, CustomImageNode);
   }
 
   get availableActions(): ExtensionActionInterface[] {
-    const nativeExtensionName = "customFile";
-    const options: ExtendedFileOptions = this.nativeExtensionInstance.options;
+    const nativeExtensionName = "customImage";
+    const options: ExtendedImageOptions = this.nativeExtensionInstance.options;
 
     const actions: ExtensionActionInterface[] = [];
+
     if (isUploadEnabled(options)) {
       actions.push({
         render: new ExtensionActionRenderTextBtn({
-          text: new I18nText("extensions.File.buttons.upload"),
+          text: new I18nText("extensions.Image.buttons.upload"),
           nativeExtensionName,
           async onClick({ editor }) {
             const selector = new FileSelector(
@@ -48,11 +54,16 @@ export default class FileExtension extends AbstractExtension {
                   propsData: {
                     files,
                     upload: options.upload,
-                    cancel: options.cancelRemainingUploads,
-                    insert: (item: { id: number; label: string }) => {
+                    cancel: options.cancelRemainingUploads ?? (() => {}),
+                    insert: (result: ImageUploadResult) => {
                       editor.commands.insertContent({
-                        type: "fileNode",
-                        attrs: { id: item.id, label: item.label },
+                        type: "customImage",
+                        attrs: {
+                          id: result.id,
+                          title: result.label,
+                          src: result.src,
+                          alt: result.alt ?? null,
+                        },
                       });
                     },
                   },
@@ -69,7 +80,7 @@ export default class FileExtension extends AbstractExtension {
     if (isAddExistingEnabled(options)) {
       actions.push({
         render: new ExtensionActionRenderTextBtn({
-          text: new I18nText("extensions.File.buttons.addExisting"),
+          text: new I18nText("extensions.Image.buttons.addExisting"),
           nativeExtensionName,
           async onClick({ editor }) {
             createAndMountComponent(
@@ -78,10 +89,15 @@ export default class FileExtension extends AbstractExtension {
               {
                 propsData: {
                   load: options.select!.load,
-                  insert: (item: { id: number; label: string }) => {
+                  insert: (item: ImageSelectItem) => {
                     editor.commands.insertContent({
-                      type: "fileNode",
-                      attrs: { id: item.id, label: item.label },
+                      type: "customImage",
+                      attrs: {
+                        id: item.id,
+                        title: item.label,
+                        src: item.src,
+                        alt: item.alt ?? null,
+                      },
                     });
                   },
                   customClass: (editor.options as any)?.editorInstanceUId,
@@ -98,13 +114,13 @@ export default class FileExtension extends AbstractExtension {
       ? [
           {
             render: new ExtensionActionRenderMenu({
-              tooltip: new I18nText("extensions.File.menu.tooltip"),
+              tooltip: new I18nText("extensions.Image.menu.tooltip"),
               icons: {
-                [VuetifyIconsGroups.md]: new VuetifyIcon("attach_file"),
-                [VuetifyIconsGroups.fa]: new VuetifyIcon("fas fa-paperclip"),
-                [VuetifyIconsGroups.mdi]: new VuetifyIcon("mdi-paperclip"),
+                [VuetifyIconsGroups.md]: new VuetifyIcon("image"),
+                [VuetifyIconsGroups.fa]: new VuetifyIcon("fas fa-image"),
+                [VuetifyIconsGroups.mdi]: new VuetifyIcon("mdi-image"),
                 [VuetifyIconsGroups.mdiSvg]: new VuetifyIcon(
-                  "M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z",
+                  "M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z",
                 ),
               },
               actions,

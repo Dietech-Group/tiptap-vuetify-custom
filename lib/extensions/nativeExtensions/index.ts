@@ -14,7 +14,7 @@ export { default as HardBreak } from "@/extensions/nativeExtensions/HardBreak";
 export { default as HorizontalRule } from "@/extensions/nativeExtensions/HorizontalRule";
 export { default as History } from "@/extensions/nativeExtensions/History";
 export { default as Link } from "@/extensions/nativeExtensions/link/Link";
-export { default as Image } from "@/extensions/nativeExtensions/image/Image";
+export { default as Image } from "@/extensions/nativeExtensions/image/ImageExtension";
 export { default as TaskList } from "@/extensions/nativeExtensions/TaskList/TaskList";
 export { default as TaskItem } from "@/extensions/nativeExtensions/TaskList/TaskItem";
 export { default as Table } from "@/extensions/nativeExtensions/table/Table";
