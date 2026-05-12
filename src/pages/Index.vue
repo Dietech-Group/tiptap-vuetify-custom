@@ -7,13 +7,25 @@
       colored-border
       elevation="2"
     >
-      <div class="d-flex">
+      <div class="d-flex align-baseline">
         <v-checkbox v-model="mentionAttachActive" class="mr-2" />
-        <div class="pt-3">
+        <div>
           Attach mention menu (for activation char '#') to this box, which makes
           the menu the same width as this box although the editor is smaller.<br />
           For the activation char '@' the menu is attached to the editor and
           therefor get it's with from it.
+        </div>
+      </div>
+      <div class="d-flex align-baseline">
+        <v-checkbox
+          :input-value="mentionReadonly"
+          class="mr-2"
+          @change="toggleMentionReadonly"
+        />
+        <div>
+          Mention readonly. When checked, existing mentions still render but the
+          toolbar button is hidden and typing '@' / '#' won't open a suggestion
+          popup.
         </div>
       </div>
     </v-alert>
@@ -24,6 +36,7 @@
     output-format="json"
    -->
     <tiptap-vuetify-editor
+      :key="`editor-readonly-${mentionReadonly}`"
       v-model="content"
       :extensions="extensionsEditor"
       placeholder="Write something …"
@@ -38,6 +51,7 @@
     <hr />
 
     <tiptap-vuetify-content
+      :key="`content-readonly-${mentionReadonly}`"
       :value="content"
       :extensions="extensionsContent"
       disabled
@@ -100,6 +114,7 @@ export default {
     extensionsEditor: null,
     extensionsContent: null,
     mentionAttachActive: false,
+    mentionReadonly: false,
     content: `
       <h1>Yay Headlines!</h1>
       <img src="https://picsum.photos/seed/test1/100" f-id="1" alt="test image" title="Test Image 2 from picsum with highres version on click" data-high-res-src="https://picsum.photos/seed/test1/1000">
@@ -250,6 +265,11 @@ console.log(factorial(5)); // Output: 120</code></pre>
     this.extensionsContent = this.extensionsDef();
   },
   methods: {
+    toggleMentionReadonly(value) {
+      this.mentionReadonly = !!value;
+      this.extensionsEditor = this.extensionsDef();
+      this.extensionsContent = this.extensionsDef();
+    },
     extensionsDef() {
       return [
         MyCustomExtension,
@@ -417,6 +437,7 @@ console.log(factorial(5)); // Output: 120</code></pre>
                 class: "mention",
               },
               deleteTriggerWithBackspace: true,
+              readonly: this.mentionReadonly,
               suggestions: [
                 {
                   char: "@",

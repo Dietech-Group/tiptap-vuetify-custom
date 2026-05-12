@@ -54,28 +54,33 @@ export default class Mention extends AbstractExtension {
 
     const btnDefs: MentionToolbarBtn[] = [];
 
-    if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
-      options.suggestions = options.suggestions.map((suggestion: any) => {
-        const buttonDef = extractBtnDefinition(suggestion);
+    if (options.readonly) {
+      delete options.suggestion;
+      delete options.suggestions;
+    } else {
+      if (Object.prototype.hasOwnProperty.call(options, "suggestions")) {
+        options.suggestions = options.suggestions.map((suggestion: any) => {
+          const buttonDef = extractBtnDefinition(suggestion);
+          if (buttonDef) btnDefs.push(buttonDef);
+
+          return Object.assign(
+            {},
+            createDefaultSuggestionOptions(extractMenuDefinition(suggestion)),
+            suggestion,
+          );
+        });
+      } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
+        const buttonDef = extractBtnDefinition(options.suggestion);
         if (buttonDef) btnDefs.push(buttonDef);
 
-        return Object.assign(
+        options.suggestion = Object.assign(
           {},
-          createDefaultSuggestionOptions(extractMenuDefinition(suggestion)),
-          suggestion,
+          createDefaultSuggestionOptions(
+            extractMenuDefinition(options.suggestion),
+          ),
+          options.suggestion,
         );
-      });
-    } else if (Object.prototype.hasOwnProperty.call(options, "suggestion")) {
-      const buttonDef = extractBtnDefinition(options.suggestion);
-      if (buttonDef) btnDefs.push(buttonDef);
-
-      options.suggestion = Object.assign(
-        {},
-        createDefaultSuggestionOptions(
-          extractMenuDefinition(options.suggestion),
-        ),
-        options.suggestion,
-      );
+      }
     }
 
     super(options, nativeExtension);
@@ -85,6 +90,8 @@ export default class Mention extends AbstractExtension {
 
   get availableActions(): ExtensionActionInterface[] {
     const nativeExtensionName = this.nativeExtensionInstance.name;
+
+    if (this.options.readonly) return [];
 
     return this.btnDefinitions.length === 0
       ? [
