@@ -23,3 +23,5 @@ export { default as TableHeader } from "@/extensions/nativeExtensions/table/Tabl
 export { default as TableRow } from "@/extensions/nativeExtensions/table/TableRow";
 export { default as Mention } from "@/extensions/nativeExtensions/mention/Mention";
 export { default as FileExtension } from "@/extensions/nativeExtensions/file/FileExtension";
+export { default as TextColor } from "@/extensions/nativeExtensions/textColor/TextColor";
+export { default as HighlightColor } from "@/extensions/nativeExtensions/highlightColor/HighlightColor";

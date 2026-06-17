@@ -159,5 +159,17 @@ export default {
         },
       },
     },
+    TextColor: {
+      buttons: {
+        tooltip: "Text Color",
+        resetColor: "Default Color",
+      },
+    },
+    Highlight: {
+      buttons: {
+        tooltip: "Highlight Color",
+        removeHighlight: "No Color",
+      },
+    },
   },
 };

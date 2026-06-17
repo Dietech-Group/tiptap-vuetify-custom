@@ -17,6 +17,14 @@
         :dark="$props[PROPS.DARK]"
         :disabled="$props[PROPS.DISABLED]"
       />
+      <action-color-picker
+        v-else-if="isColorPicker(action)"
+        :key="'action-color-picker-' + i"
+        :options="action.render.options"
+        :editor="$props[PROPS.EDITOR]"
+        :dark="$props[PROPS.DARK]"
+        :disabled="$props[PROPS.DISABLED]"
+      />
     </template>
   </div>
 </template>
@@ -34,6 +42,9 @@ import ExtensionActionRenderBtnComponent from "@/extensions/actions/renders/btn/
 import { isMenu } from "@/extensions/actions/renders/menu/ExtensionActionRenderMenu";
 import ExtensionActionRenderMenuComponent from "@/extensions/actions/renders/menu/ExtensionActionRenderMenu.vue";
 
+import { isColorPicker } from "@/extensions/actions/renders/colorPicker/ExtensionActionRenderColorPicker";
+import ExtensionActionRenderColorPickerComponent from "@/extensions/actions/renders/colorPicker/ExtensionActionRenderColorPicker.vue";
+
 export const PROPS = {
   EDITOR: "editor" as const,
   ACTIONS: "actions" as const,
@@ -45,6 +56,7 @@ export default defineComponent({
   components: {
     "action-btn": ExtensionActionRenderBtnComponent,
     "action-menu": ExtensionActionRenderMenuComponent,
+    "action-color-picker": ExtensionActionRenderColorPickerComponent,
   },
   props: {
     [PROPS.EDITOR]: {
@@ -72,6 +84,7 @@ export default defineComponent({
   methods: {
     isBtn,
     isMenu,
+    isColorPicker,
   },
 });
 </script>

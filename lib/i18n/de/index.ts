@@ -173,5 +173,17 @@ export default {
         addExisting: "Bestehende Datei hinzufügen",
       },
     },
+    TextColor: {
+      buttons: {
+        tooltip: "Schriftfarbe",
+        resetColor: "Standard Farbe",
+      },
+    },
+    Highlight: {
+      buttons: {
+        tooltip: "Texthervorhebungsfarbe",
+        removeHighlight: "Keine Farbe",
+      },
+    },
   },
 };

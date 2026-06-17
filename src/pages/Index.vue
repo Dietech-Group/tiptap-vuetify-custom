@@ -98,6 +98,8 @@ import {
   TableRow,
   Mention,
   FileExtension,
+  TextColor,
+  HighlightColor,
 } from "src/lib";
 
 import "highlight.js/styles/stackoverflow-light.css";
@@ -311,6 +313,8 @@ console.log(factorial(5)); // Output: 120</code></pre>
         Underline,
         Strike,
         Italic,
+        TextColor,
+        HighlightColor,
         ListItem, // если нужно использовать список (BulletList, OrderedList)
         BulletList,
         OrderedList,
